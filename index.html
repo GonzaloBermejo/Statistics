@@ -45,7 +45,8 @@ h2{
   font-size:1.35rem;
 }
 
-select,input{
+select,input,textarea{
+  font-family:inherit;
   font-size:1rem;
   padding:10px 12px;
   border:1px solid #cbd5e1;
@@ -56,6 +57,13 @@ select,input{
 select{
   width:100%;
   max-width:400px;
+}
+
+textarea{
+  width:100%;
+  min-height:120px;
+  resize:vertical;
+  line-height:1.6;
 }
 
 button{
@@ -166,6 +174,40 @@ td input{
   border-radius:7px;
 }
 
+/* ENTRADA CONTÍNUA */
+
+.continuous-input{
+  margin-top:20px;
+}
+
+.continuous-input label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.interval-control{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.interval-control label{
+  font-weight:bold;
+}
+
+.interval-control input{
+  width:130px;
+}
+
+.small-help{
+  color:#6b7280;
+  font-size:.92rem;
+  margin-top:7px;
+}
+
 /* MISSATGES PEDAGÒGICS */
 
 .pedagogic{
@@ -193,6 +235,11 @@ td input{
 .pedagogic.discreta{
   background:#f5f3ff;
   border-left:5px solid #7c3aed;
+}
+
+.pedagogic.continua{
+  background:#ecfeff;
+  border-left:5px solid #0891b2;
 }
 
 /* MODA */
@@ -398,15 +445,16 @@ td input{
   flex-shrink:0;
 }
 
-/* POLÍGON DE FREQÜÈNCIES */
+/* CANVAS */
 
-.polygon-wrapper{
+.canvas-wrapper{
   width:100%;
   overflow-x:auto;
   margin-top:15px;
 }
 
-#polygonCanvas{
+#polygonCanvas,
+#histogramCanvas{
   display:block;
   width:100%;
   min-width:650px;
@@ -475,6 +523,10 @@ td input{
 
 <h2>2. Introdueix les dades</h2>
 
+<!-- ENTRADA NORMAL -->
+
+<div id="entradaFrequencies">
+
 <p>
 Escriu els valors de la variable i la seva freqüència absoluta.
 </p>
@@ -542,6 +594,72 @@ La taula els ordenarà automàticament
 <button class="secondary" onclick="afegirFila()">+ Afegir valor</button>
 </div>
 
+</div>
+
+<!-- ENTRADA CONTÍNUA -->
+
+<div id="entradaContinua" class="continuous-input hidden">
+
+<div class="pedagogic continua">
+
+<div class="pedagogic-title">
+💡 Les variables quantitatives contínues poden prendre qualsevol valor dins d'un interval
+</div>
+
+Introdueix les <strong>dades individuals</strong>.
+La web les agruparà automàticament en intervals
+amb l'amplada que indiquis.
+
+</div>
+
+<div style="margin-top:22px">
+
+<label for="dadesContinues">
+Dades:
+</label>
+
+<textarea
+id="dadesContinues"
+placeholder="Per exemple: 162, 168, 171, 175, 166, 181, 173, 169, 177, 164, 172, 178"
+></textarea>
+
+<div class="small-help">
+Pots separar els valors amb comes, espais, punts i coma o salts de línia.
+Per escriure decimals, pots utilitzar coma o punt.
+</div>
+
+</div>
+
+<div class="interval-control">
+
+<label for="ampladaIntervals">
+Amplada dels intervals:
+</label>
+
+<input
+type="number"
+id="ampladaIntervals"
+min="0.0001"
+step="any"
+value="5"
+>
+
+</div>
+
+<div class="pedagogic continua">
+
+<div class="pedagogic-title">
+💡 Què significa l'amplada dels intervals?
+</div>
+
+Si, per exemple, les dades són alçades i tries una amplada de
+<strong>5 cm</strong>, la web pot crear intervals com
+<strong>[160,165), [165,170), [170,175)...</strong>
+
+</div>
+
+</div>
+
 <button class="generate" onclick="generarTaula()">
 Generar taula de freqüències
 </button>
@@ -598,6 +716,19 @@ Mesures de centralització
 </div>
 </div>
 
+<div id="mesuresContinua" class="mesures-box hidden">
+
+<div class="mesures-title">
+Mesures de centralització
+</div>
+
+<div class="mesura">
+<strong>Mitjana estimada:</strong>
+<span id="resultatMitjanaContinua"></span>
+</div>
+
+</div>
+
 <div id="missatgeNominal" class="pedagogic nominal hidden">
 
 <div class="pedagogic-title">
@@ -640,6 +771,42 @@ podem fer operacions amb ells.
 El producte <strong>xᵢ · nᵢ</strong> indica la contribució
 de cada valor a la suma total de les dades i ens permet
 calcular la <strong>mitjana aritmètica</strong>.
+
+</div>
+
+<div id="missatgeContinua" class="pedagogic continua hidden">
+
+<div class="pedagogic-title">
+💡 Què és la marca de classe?
+</div>
+
+Quan agrupem dades contínues en intervals, ja no treballem
+amb un únic valor <strong>xᵢ</strong> per a cada fila.
+
+Utilitzem la <strong>marca de classe</strong>, que és el punt mig
+de l'interval:
+
+<br><br>
+
+<strong>xᵢ = (límit inferior + límit superior) / 2</strong>
+
+</div>
+
+<div id="missatgeMitjanaContinua" class="pedagogic continua hidden">
+
+<div class="pedagogic-title">
+💡 Per què la mitjana és estimada?
+</div>
+
+En agrupar les dades en intervals perdem informació sobre
+el valor exacte de cada individu.
+
+Per calcular la mitjana considerem que els valors de cada
+interval estan representats per la seva
+<strong>marca de classe</strong>.
+
+Per això la mitjana calculada a partir de la taula agrupada
+és una <strong>estimació</strong>.
 
 </div>
 
@@ -737,10 +904,8 @@ Polígon de freqüències
 Freqüència absoluta segons el valor de la variable
 </div>
 
-<div class="polygon-wrapper">
-
+<div class="canvas-wrapper">
 <canvas id="polygonCanvas" width="900" height="430"></canvas>
-
 </div>
 
 <div class="pedagogic discreta">
@@ -762,6 +927,37 @@ El polígon de freqüències representa els punts
 
 </div>
 
+<!-- HISTOGRAMA -->
+
+<div id="zonaHistograma" class="zona-grafic hidden">
+
+<h3 class="grafic-titol">
+Histograma
+</h3>
+
+<div class="grafic-subtitol">
+Distribució de les dades per intervals
+</div>
+
+<div class="canvas-wrapper">
+<canvas id="histogramCanvas" width="900" height="430"></canvas>
+</div>
+
+<div class="pedagogic continua">
+
+<div class="pedagogic-title">
+💡 Per què les barres estan juntes?
+</div>
+
+En un histograma les barres estan juntes perquè representen
+<strong>intervals consecutius d'una variable quantitativa contínua</strong>.
+
+Entre un interval i el següent no hi ha cap separació.
+
+</div>
+
+</div>
+
 </div>
 
 <script>
@@ -778,12 +974,23 @@ function actualitzarAjudaEntrada(){
   document.getElementById("avisOrdinalEntrada").classList.add("hidden");
   document.getElementById("avisDiscretaEntrada").classList.add("hidden");
 
-  if(tipus==="ordinal"){
-    document.getElementById("avisOrdinalEntrada").classList.remove("hidden");
-  }
+  if(tipus==="continua"){
 
-  if(tipus==="discreta"){
-    document.getElementById("avisDiscretaEntrada").classList.remove("hidden");
+    document.getElementById("entradaFrequencies").classList.add("hidden");
+    document.getElementById("entradaContinua").classList.remove("hidden");
+
+  }else{
+
+    document.getElementById("entradaFrequencies").classList.remove("hidden");
+    document.getElementById("entradaContinua").classList.add("hidden");
+
+    if(tipus==="ordinal"){
+      document.getElementById("avisOrdinalEntrada").classList.remove("hidden");
+    }
+
+    if(tipus==="discreta"){
+      document.getElementById("avisDiscretaEntrada").classList.remove("hidden");
+    }
   }
 }
 
@@ -826,9 +1033,7 @@ function generarTaula(){
 
   const tipus=document.getElementById("tipusVariable").value;
 
-  const error=document.getElementById("error");
-
-  error.classList.add("hidden");
+  document.getElementById("error").classList.add("hidden");
 
   if(!tipus){
 
@@ -836,6 +1041,12 @@ function generarTaula(){
       "Primer has de seleccionar el tipus de variable estadística."
     );
 
+    return;
+  }
+
+  if(tipus==="continua"){
+
+    generarTaulaContinua();
     return;
   }
 
@@ -876,7 +1087,7 @@ function generarTaula(){
       return;
     }
 
-    if(tipus==="discreta" || tipus==="continua"){
+    if(tipus==="discreta"){
 
       const valorNumeric=Number(
         valorText.replace(",",".")
@@ -947,13 +1158,334 @@ function generarTaula(){
 }
 
 
-function ocultarGrafics(){
+/* ==============================
+   VARIABLE CONTÍNUA
+   ============================== */
 
-  document.getElementById("zonaBarres").classList.add("hidden");
-  document.getElementById("zonaSectors").classList.add("hidden");
-  document.getElementById("zonaPoligon").classList.add("hidden");
+function generarTaulaContinua(){
+
+  const text=document.getElementById("dadesContinues").value.trim();
+
+  const amplada=Number(
+    document.getElementById("ampladaIntervals").value
+  );
+
+  if(text===""){
+
+    mostrarError(
+      "Has d'introduir les dades de la variable."
+    );
+
+    return;
+  }
+
+  if(!Number.isFinite(amplada) || amplada<=0){
+
+    mostrarError(
+      "L'amplada dels intervals ha de ser un nombre positiu."
+    );
+
+    return;
+  }
+
+  const dades=parsejarDadesContinues(text);
+
+  if(!dades || dades.length===0){
+
+    mostrarError(
+      "No s'han pogut interpretar les dades. Comprova que tots els valors siguin numèrics."
+    );
+
+    return;
+  }
+
+  dades.sort((a,b)=>a-b);
+
+  const minim=dades[0];
+  const maxim=dades[dades.length-1];
+
+  /*
+    Busquem un límit inferior còmode:
+    el múltiple de l'amplada immediatament
+    inferior o igual al valor mínim.
+  */
+
+  const inici=
+    Math.floor(minim/amplada)*amplada;
+
+  /*
+    Afegim sempre intervals fins que
+    el valor màxim quedi dins d'un interval
+    [límit inferior, límit superior).
+  */
+
+  const nombreIntervals=
+    Math.floor((maxim-inici)/amplada)+1;
+
+  let intervals=[];
+
+  for(let i=0;i<nombreIntervals;i++){
+
+    const inferior=netejarPrecisio(
+      inici+i*amplada
+    );
+
+    const superior=netejarPrecisio(
+      inferior+amplada
+    );
+
+    intervals.push({
+      inferior:inferior,
+      superior:superior,
+      marca:netejarPrecisio(
+        (inferior+superior)/2
+      ),
+      frequencia:0
+    });
+  }
+
+  /*
+    Comptem quantes dades cauen
+    dins de cada interval.
+  */
+
+  dades.forEach(valor=>{
+
+    let index=
+      Math.floor((valor-inici)/amplada);
+
+    /*
+      Protecció contra petits errors
+      de precisió dels decimals.
+    */
+
+    if(index<0){
+      index=0;
+    }
+
+    if(index>=intervals.length){
+      index=intervals.length-1;
+    }
+
+    intervals[index].frequencia++;
+  });
+
+  dadesActuals=intervals;
+  totalActual=dades.length;
+  tipusActual="continua";
+
+  construirTaulaContinua(
+    intervals,
+    dades.length
+  );
+
+  mostrarGrafics("continua");
+
+  ocultarGrafics();
 }
 
+
+function parsejarDadesContinues(text){
+
+  /*
+    Acceptem:
+    162, 168, 171
+    162 168 171
+    162;168;171
+    o salts de línia.
+
+    Per evitar confondre una coma decimal
+    amb una coma separadora, interpretem
+    com a decimals les comes que apareixen
+    entre dígits sense espais quan hi ha
+    punts i coma o salts de línia.
+
+    En una llista normal separada per comes,
+    les comes actuen com a separadors.
+  */
+
+  let fragments;
+
+  if(text.includes(";") || text.includes("\n")){
+
+    fragments=text
+      .split(/[;\n]+/)
+      .flatMap(fragment=>fragment.trim().split(/\s+/));
+
+  }else{
+
+    fragments=text.split(/[,\s]+/);
+  }
+
+  const numeros=[];
+
+  for(let fragment of fragments){
+
+    fragment=fragment.trim();
+
+    if(fragment===""){
+      continue;
+    }
+
+    fragment=fragment.replace(",",".");
+
+    const numero=Number(fragment);
+
+    if(!Number.isFinite(numero)){
+      return null;
+    }
+
+    numeros.push(numero);
+  }
+
+  return numeros;
+}
+
+
+function construirTaulaContinua(intervals,N){
+
+  const thead=document.getElementById("capResultats");
+  const tbody=document.getElementById("cosResultats");
+  const tfoot=document.getElementById("peuResultats");
+
+  thead.innerHTML=`
+    <tr>
+      <th>Interval</th>
+      <th>Marca de classe<br>xᵢ</th>
+      <th>Freq. absoluta<br>nᵢ</th>
+      <th>Freq. relativa<br>fᵢ</th>
+      <th>Percentatge<br>%</th>
+      <th>Freq. abs. acumulada<br>Nᵢ</th>
+      <th>Freq. rel. acumulada<br>Fᵢ</th>
+      <th>xᵢ · nᵢ</th>
+    </tr>
+  `;
+
+  tbody.innerHTML="";
+  tfoot.innerHTML="";
+
+  let absolutaAcumulada=0;
+  let relativaAcumulada=0;
+  let sumaProductes=0;
+
+  intervals.forEach((interval,index)=>{
+
+    const relativa=
+      interval.frequencia/N;
+
+    const percentatge=
+      relativa*100;
+
+    absolutaAcumulada+=
+      interval.frequencia;
+
+    relativaAcumulada+=
+      relativa;
+
+    const producte=
+      interval.marca*
+      interval.frequencia;
+
+    sumaProductes+=producte;
+
+    const ultima=
+      index===intervals.length-1;
+
+    const fila=document.createElement("tr");
+
+    fila.innerHTML=`
+      <td>
+        [${formatNumero(interval.inferior)},
+        ${formatNumero(interval.superior)})
+      </td>
+
+      <td>
+        ${formatNumero(interval.marca)}
+      </td>
+
+      <td>
+        ${interval.frequencia}
+      </td>
+
+      <td>
+        ${formatDecimal(relativa)}
+      </td>
+
+      <td>
+        ${formatPercentatge(percentatge)} %
+      </td>
+
+      <td class="${ultima?"final-acumulada":""}">
+        ${ultima
+          ? absolutaAcumulada+" = N"
+          : absolutaAcumulada}
+      </td>
+
+      <td class="${ultima?"final-acumulada":""}">
+        ${ultima
+          ? "1"
+          : formatDecimal(relativaAcumulada)}
+      </td>
+
+      <td>
+        ${formatNumero(producte)}
+      </td>
+    `;
+
+    tbody.appendChild(fila);
+  });
+
+  const filaTotal=document.createElement("tr");
+
+  filaTotal.className="total-row";
+
+  filaTotal.innerHTML=`
+    <td>TOTAL</td>
+    <td>—</td>
+    <td>${N} = N</td>
+    <td>1</td>
+    <td>100 %</td>
+    <td>—</td>
+    <td>—</td>
+    <td>${formatNumero(sumaProductes)}</td>
+  `;
+
+  tfoot.appendChild(filaTotal);
+
+  document.getElementById("total").innerHTML=
+    `Nombre total d'individus: N = ${N}`;
+
+  ocultarMissatgesResultats();
+
+  document
+    .getElementById("missatgeContinua")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("missatgeMitjanaContinua")
+    .classList.remove("hidden");
+
+  const mitjanaEstimada=
+    sumaProductes/N;
+
+  document.getElementById(
+    "resultatMitjanaContinua"
+  ).textContent=
+    formatNumero(mitjanaEstimada);
+
+  document
+    .getElementById("mesuresContinua")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("resultats")
+    .classList.remove("hidden");
+}
+
+
+/* ==============================
+   TAULES ALTRES VARIABLES
+   ============================== */
 
 function construirTaula(dades,N,tipus){
 
@@ -1013,19 +1545,27 @@ function construirTaula(dades,N,tipus){
 
   dades.forEach((dada,index)=>{
 
-    const relativa=dada.frequencia/N;
-    const percentatge=relativa*100;
+    const relativa=
+      dada.frequencia/N;
 
-    absolutaAcumulada+=dada.frequencia;
-    relativaAcumulada+=relativa;
+    const percentatge=
+      relativa*100;
 
-    const ultima=index===dades.length-1;
+    absolutaAcumulada+=
+      dada.frequencia;
+
+    relativaAcumulada+=
+      relativa;
+
+    const ultima=
+      index===dades.length-1;
 
     const fila=document.createElement("tr");
 
     if(esDiscreta){
 
-      const producte=dada.valor*dada.frequencia;
+      const producte=
+        dada.valor*dada.frequencia;
 
       sumaProductes+=producte;
 
@@ -1036,11 +1576,15 @@ function construirTaula(dades,N,tipus){
         <td>${formatPercentatge(percentatge)} %</td>
 
         <td class="${ultima?"final-acumulada":""}">
-          ${ultima ? absolutaAcumulada+" = N" : absolutaAcumulada}
+          ${ultima
+            ? absolutaAcumulada+" = N"
+            : absolutaAcumulada}
         </td>
 
         <td class="${ultima?"final-acumulada":""}">
-          ${ultima ? "1" : formatDecimal(relativaAcumulada)}
+          ${ultima
+            ? "1"
+            : formatDecimal(relativaAcumulada)}
         </td>
 
         <td>${formatNumero(producte)}</td>
@@ -1055,11 +1599,15 @@ function construirTaula(dades,N,tipus){
         <td>${formatPercentatge(percentatge)} %</td>
 
         <td class="${ultima?"final-acumulada":""}">
-          ${ultima ? absolutaAcumulada+" = N" : absolutaAcumulada}
+          ${ultima
+            ? absolutaAcumulada+" = N"
+            : absolutaAcumulada}
         </td>
 
         <td class="${ultima?"final-acumulada":""}">
-          ${ultima ? "1" : formatDecimal(relativaAcumulada)}
+          ${ultima
+            ? "1"
+            : formatDecimal(relativaAcumulada)}
         </td>
       `;
 
@@ -1118,33 +1666,31 @@ function construirTaula(dades,N,tipus){
   document.getElementById("total").innerHTML=
     `Nombre total d'individus: N = ${N}`;
 
-  const missatgeNominal=document.getElementById("missatgeNominal");
-  const missatgeOrdinal=document.getElementById("missatgeOrdinal");
-  const missatgeDiscreta=document.getElementById("missatgeDiscreta");
-  const moda=document.getElementById("moda");
-  const mesures=document.getElementById("mesuresCentralitzacio");
-
-  missatgeNominal.classList.add("hidden");
-  missatgeOrdinal.classList.add("hidden");
-  missatgeDiscreta.classList.add("hidden");
-  moda.classList.add("hidden");
-  mesures.classList.add("hidden");
+  ocultarMissatgesResultats();
 
   if(tipus==="nominal"){
 
-    missatgeNominal.classList.remove("hidden");
+    document
+      .getElementById("missatgeNominal")
+      .classList.remove("hidden");
+
     mostrarModa(dades);
   }
 
   if(tipus==="ordinal"){
 
-    missatgeOrdinal.classList.remove("hidden");
+    document
+      .getElementById("missatgeOrdinal")
+      .classList.remove("hidden");
+
     mostrarModa(dades);
   }
 
   if(tipus==="discreta"){
 
-    missatgeDiscreta.classList.remove("hidden");
+    document
+      .getElementById("missatgeDiscreta")
+      .classList.remove("hidden");
 
     mostrarMesuresCentralitzacio(
       dades,
@@ -1153,9 +1699,32 @@ function construirTaula(dades,N,tipus){
     );
   }
 
-  document.getElementById("resultats").classList.remove("hidden");
+  document
+    .getElementById("resultats")
+    .classList.remove("hidden");
 }
 
+
+function ocultarMissatgesResultats(){
+
+  [
+    "missatgeNominal",
+    "missatgeOrdinal",
+    "missatgeDiscreta",
+    "missatgeContinua",
+    "missatgeMitjanaContinua",
+    "moda",
+    "mesuresCentralitzacio",
+    "mesuresContinua"
+  ].forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+
+
+/* ==============================
+   MESURES
+   ============================== */
 
 function mostrarModa(dades){
 
@@ -1216,7 +1785,9 @@ function mostrarMesuresCentralitzacio(dades,N,sumaProductes){
   document.getElementById("resultatModaDiscreta").innerHTML=
     textModa;
 
-  document.getElementById("mesuresCentralitzacio").classList.remove("hidden");
+  document
+    .getElementById("mesuresCentralitzacio")
+    .classList.remove("hidden");
 }
 
 
@@ -1231,15 +1802,11 @@ function calcularMedianaDiscreta(dades,N){
 
   }else{
 
-    const valor1=valorEnPosicio(
-      dades,
-      N/2
-    );
+    const valor1=
+      valorEnPosicio(dades,N/2);
 
-    const valor2=valorEnPosicio(
-      dades,
-      N/2+1
-    );
+    const valor2=
+      valorEnPosicio(dades,N/2+1);
 
     return (valor1+valor2)/2;
   }
@@ -1300,7 +1867,9 @@ function calcularModaDiscreta(dades){
 }
 
 
-/* GRÀFICS DISPONIBLES */
+/* ==============================
+   GRÀFICS DISPONIBLES
+   ============================== */
 
 function mostrarGrafics(tipus){
 
@@ -1343,7 +1912,10 @@ function mostrarGrafics(tipus){
   if(tipus==="continua"){
 
     nomTipus="quantitativa contínua";
-    grafics=[];
+
+    grafics=[
+      "Histograma"
+    ];
   }
 
   info.innerHTML=`
@@ -1354,45 +1926,54 @@ function mostrarGrafics(tipus){
 
   botons.innerHTML="";
 
-  if(grafics.length===0){
+  grafics.forEach(grafic=>{
 
-    botons.innerHTML=`
-      <span>
-        Properament afegirem gràfics
-        per a aquest tipus de variable.
-      </span>
-    `;
+    const boto=document.createElement("button");
 
-  }else{
+    boto.className="graph-button";
+    boto.textContent=grafic;
 
-    grafics.forEach(grafic=>{
+    if(grafic==="Diagrama de barres"){
+      boto.onclick=generarDiagramaBarres;
+    }
 
-      const boto=document.createElement("button");
+    if(grafic==="Diagrama de sectors"){
+      boto.onclick=generarDiagramaSectors;
+    }
 
-      boto.className="graph-button";
-      boto.textContent=grafic;
+    if(grafic==="Polígon de freqüències"){
+      boto.onclick=generarPoligonFrequencies;
+    }
 
-      if(grafic==="Diagrama de barres"){
-        boto.onclick=generarDiagramaBarres;
-      }
+    if(grafic==="Histograma"){
+      boto.onclick=generarHistograma;
+    }
 
-      if(grafic==="Diagrama de sectors"){
-        boto.onclick=generarDiagramaSectors;
-      }
+    botons.appendChild(boto);
+  });
 
-      if(grafic==="Polígon de freqüències"){
-        boto.onclick=generarPoligonFrequencies;
-      }
-
-      botons.appendChild(boto);
-    });
-  }
-
-  document.getElementById("grafics").classList.remove("hidden");
+  document
+    .getElementById("grafics")
+    .classList.remove("hidden");
 }
 
 
-/* BARRES */
+function ocultarGrafics(){
+
+  [
+    "zonaBarres",
+    "zonaSectors",
+    "zonaPoligon",
+    "zonaHistograma"
+  ].forEach(id=>{
+    document.getElementById(id).classList.add("hidden");
+  });
+}
+
+
+/* ==============================
+   DIAGRAMA DE BARRES
+   ============================== */
 
 function generarDiagramaBarres(){
 
@@ -1463,7 +2044,8 @@ function generarDiagramaBarres(){
     const barra=document.createElement("div");
     barra.className="bar";
 
-    const altura=(dada.frequencia/escalaMax)*100;
+    const altura=
+      (dada.frequencia/escalaMax)*100;
 
     barra.style.height=altura+"%";
 
@@ -1490,7 +2072,9 @@ function generarDiagramaBarres(){
 }
 
 
-/* SECTORS */
+/* ==============================
+   DIAGRAMA DE SECTORS
+   ============================== */
 
 function generarDiagramaSectors(){
 
@@ -1534,11 +2118,17 @@ function generarDiagramaSectors(){
 
   dadesActuals.forEach((dada,index)=>{
 
-    const proporcio=dada.frequencia/totalActual;
-    const angle=proporcio*Math.PI*2;
-    const angleFinal=angleInicial+angle;
+    const proporcio=
+      dada.frequencia/totalActual;
 
-    const color=colors[index%colors.length];
+    const angle=
+      proporcio*Math.PI*2;
+
+    const angleFinal=
+      angleInicial+angle;
+
+    const color=
+      colors[index%colors.length];
 
     ctx.beginPath();
     ctx.moveTo(centreX,centreY);
@@ -1560,12 +2150,16 @@ function generarDiagramaSectors(){
     ctx.lineWidth=3;
     ctx.stroke();
 
-    const percentatge=proporcio*100;
+    const percentatge=
+      proporcio*100;
 
     if(percentatge>=5){
 
-      const angleMig=angleInicial+angle/2;
-      const distancia=radi*.62;
+      const angleMig=
+        angleInicial+angle/2;
+
+      const distancia=
+        radi*.62;
 
       const textX=
         centreX+
@@ -1587,14 +2181,19 @@ function generarDiagramaSectors(){
       );
     }
 
-    const item=document.createElement("div");
+    const item=
+      document.createElement("div");
+
     item.className="legend-item";
 
-    const quadrat=document.createElement("div");
+    const quadrat=
+      document.createElement("div");
+
     quadrat.className="legend-color";
     quadrat.style.background=color;
 
-    const text=document.createElement("div");
+    const text=
+      document.createElement("div");
 
     text.innerHTML=`
       <strong>${dada.valor}</strong>
@@ -1619,9 +2218,9 @@ function generarDiagramaSectors(){
 }
 
 
-/* =========================================
+/* ==============================
    POLÍGON DE FREQÜÈNCIES
-   ========================================= */
+   ============================== */
 
 function generarPoligonFrequencies(){
 
@@ -1631,13 +2230,11 @@ function generarPoligonFrequencies(){
   const canvas=document.getElementById("polygonCanvas");
   const ctx=canvas.getContext("2d");
 
-  /*
-    Ajustem la resolució interna del canvas
-    a la mida que té realment en pantalla.
-  */
-
   const ampladaVisible=
-    Math.max(canvas.parentElement.clientWidth,650);
+    Math.max(
+      canvas.parentElement.clientWidth,
+      650
+    );
 
   canvas.width=ampladaVisible;
   canvas.height=430;
@@ -1660,9 +2257,10 @@ function generarPoligonFrequencies(){
   const alcadaGrafic=
     H-marge.superior-marge.inferior;
 
-  const dades=[...dadesActuals].sort(
-    (a,b)=>a.valor-b.valor
-  );
+  const dades=
+    [...dadesActuals].sort(
+      (a,b)=>a.valor-b.valor
+    );
 
   const minX=Math.min(
     ...dades.map(d=>d.valor)
@@ -1676,22 +2274,11 @@ function generarPoligonFrequencies(){
     ...dades.map(d=>d.frequencia)
   );
 
-  /*
-    Deixem una mica d'espai per sobre
-    de la freqüència màxima.
-  */
-
   let maxY=Math.ceil(maxFreq*1.15);
 
   if(maxY<5){
     maxY=5;
   }
-
-  /*
-    Si només hi hagués un valor de x,
-    creem artificialment una petita escala
-    al voltant seu perquè es pugui representar.
-  */
 
   let xMinEscala=minX;
   let xMaxEscala=maxX;
@@ -1717,18 +2304,404 @@ function generarPoligonFrequencies(){
       (freq/maxY)*alcadaGrafic;
   }
 
-  /* LÍNIES HORITZONTALS I ESCALA Y */
+  dibuixarEscalaY(
+    ctx,
+    W,
+    marge,
+    alcadaGrafic,
+    maxY,
+    coordY
+  );
 
-  const divisionsY=5;
+  const origenY=coordY(0);
+
+  ctx.strokeStyle="#374151";
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    marge.esquerra,
+    marge.superior
+  );
+
+  ctx.lineTo(
+    marge.esquerra,
+    origenY
+  );
+
+  ctx.lineTo(
+    W-marge.dreta,
+    origenY
+  );
+
+  ctx.stroke();
+
+  ctx.textAlign="center";
+  ctx.textBaseline="top";
+  ctx.font="13px Arial";
+
+  dades.forEach(dada=>{
+
+    const x=coordX(dada.valor);
+
+    ctx.strokeStyle="#374151";
+    ctx.lineWidth=1;
+
+    ctx.beginPath();
+    ctx.moveTo(x,origenY);
+    ctx.lineTo(x,origenY+6);
+    ctx.stroke();
+
+    ctx.fillStyle="#374151";
+
+    ctx.fillText(
+      formatNumero(dada.valor),
+      x,
+      origenY+10
+    );
+  });
+
+  ctx.beginPath();
+
+  dades.forEach((dada,index)=>{
+
+    const x=coordX(dada.valor);
+    const y=coordY(dada.frequencia);
+
+    if(index===0){
+      ctx.moveTo(x,y);
+    }else{
+      ctx.lineTo(x,y);
+    }
+  });
+
+  ctx.strokeStyle="#2563eb";
+  ctx.lineWidth=3;
+  ctx.lineJoin="round";
+  ctx.lineCap="round";
+  ctx.stroke();
+
+  dades.forEach(dada=>{
+
+    const x=coordX(dada.valor);
+    const y=coordY(dada.frequencia);
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      6,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle="#2563eb";
+    ctx.fill();
+
+    ctx.strokeStyle="#ffffff";
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    ctx.fillStyle="#1f2937";
+    ctx.font="bold 14px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="bottom";
+
+    ctx.fillText(
+      dada.frequencia,
+      x,
+      y-10
+    );
+  });
+
+  dibuixarNomsEixos(
+    ctx,
+    W,
+    H,
+    marge,
+    ampladaGrafic,
+    alcadaGrafic,
+    "Valor de la variable (xᵢ)",
+    "Freqüència absoluta (nᵢ)"
+  );
+
+  zona.classList.remove("hidden");
+
+  zona.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+
+/* ==============================
+   HISTOGRAMA
+   ============================== */
+
+function generarHistograma(){
+
+  ocultarGrafics();
+
+  const zona=
+    document.getElementById("zonaHistograma");
+
+  const canvas=
+    document.getElementById("histogramCanvas");
+
+  const ctx=
+    canvas.getContext("2d");
+
+  const ampladaVisible=
+    Math.max(
+      canvas.parentElement.clientWidth,
+      650
+    );
+
+  canvas.width=ampladaVisible;
+  canvas.height=430;
+
+  const W=canvas.width;
+  const H=canvas.height;
+
+  ctx.clearRect(0,0,W,H);
+
+  const marge={
+    esquerra:75,
+    dreta:35,
+    superior:40,
+    inferior:75
+  };
+
+  const ampladaGrafic=
+    W-marge.esquerra-marge.dreta;
+
+  const alcadaGrafic=
+    H-marge.superior-marge.inferior;
+
+  const intervals=dadesActuals;
+
+  const maxFreq=Math.max(
+    ...intervals.map(d=>d.frequencia)
+  );
+
+  let maxY=Math.ceil(maxFreq*1.15);
+
+  if(maxY<5){
+    maxY=5;
+  }
+
+  const nombreIntervals=
+    intervals.length;
+
+  const ampladaBarra=
+    ampladaGrafic/nombreIntervals;
+
+  function coordY(freq){
+
+    return marge.superior+
+      alcadaGrafic-
+      (freq/maxY)*alcadaGrafic;
+  }
+
+  dibuixarEscalaY(
+    ctx,
+    W,
+    marge,
+    alcadaGrafic,
+    maxY,
+    coordY
+  );
+
+  const origenY=coordY(0);
+
+  /*
+    Dibuixem les barres sense cap espai
+    entre elles.
+  */
+
+  intervals.forEach((interval,index)=>{
+
+    const x=
+      marge.esquerra+
+      index*ampladaBarra;
+
+    const y=
+      coordY(interval.frequencia);
+
+    const altura=
+      origenY-y;
+
+    ctx.fillStyle="#2563eb";
+
+    ctx.fillRect(
+      x,
+      y,
+      ampladaBarra,
+      altura
+    );
+
+    /*
+      Una línia fina permet distingir
+      els intervals sense crear un buit.
+    */
+
+    ctx.strokeStyle="#ffffff";
+    ctx.lineWidth=1;
+
+    ctx.strokeRect(
+      x,
+      y,
+      ampladaBarra,
+      altura
+    );
+
+    /*
+      Freqüència sobre la barra.
+    */
+
+    if(interval.frequencia>0){
+
+      ctx.fillStyle="#1f2937";
+      ctx.font="bold 14px Arial";
+      ctx.textAlign="center";
+      ctx.textBaseline="bottom";
+
+      ctx.fillText(
+        interval.frequencia,
+        x+ampladaBarra/2,
+        y-7
+      );
+    }
+  });
+
+  /*
+    Eixos.
+  */
+
+  ctx.strokeStyle="#374151";
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    marge.esquerra,
+    marge.superior
+  );
+
+  ctx.lineTo(
+    marge.esquerra,
+    origenY
+  );
+
+  ctx.lineTo(
+    W-marge.dreta,
+    origenY
+  );
+
+  ctx.stroke();
+
+  /*
+    En un histograma els números de l'eix X
+    representen els límits dels intervals.
+  */
+
+  ctx.fillStyle="#374151";
+  ctx.font="13px Arial";
+  ctx.textAlign="center";
+  ctx.textBaseline="top";
+
+  intervals.forEach((interval,index)=>{
+
+    const x=
+      marge.esquerra+
+      index*ampladaBarra;
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,origenY);
+    ctx.lineTo(x,origenY+6);
+
+    ctx.strokeStyle="#374151";
+    ctx.lineWidth=1;
+    ctx.stroke();
+
+    ctx.fillText(
+      formatNumero(interval.inferior),
+      x,
+      origenY+10
+    );
+  });
+
+  /*
+    Límit superior de l'últim interval.
+  */
+
+  const ultim=
+    intervals[intervals.length-1];
+
+  const xFinal=
+    marge.esquerra+
+    ampladaGrafic;
+
+  ctx.beginPath();
+
+  ctx.moveTo(xFinal,origenY);
+  ctx.lineTo(xFinal,origenY+6);
+
+  ctx.strokeStyle="#374151";
+  ctx.stroke();
+
+  ctx.fillText(
+    formatNumero(ultim.superior),
+    xFinal,
+    origenY+10
+  );
+
+  dibuixarNomsEixos(
+    ctx,
+    W,
+    H,
+    marge,
+    ampladaGrafic,
+    alcadaGrafic,
+    "Valor de la variable",
+    "Freqüència absoluta (nᵢ)"
+  );
+
+  zona.classList.remove("hidden");
+
+  zona.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+}
+
+
+/* ==============================
+   FUNCIONS GRÀFIQUES COMUNES
+   ============================== */
+
+function dibuixarEscalaY(
+  ctx,
+  W,
+  marge,
+  alcadaGrafic,
+  maxY,
+  coordY
+){
+
+  const divisions=5;
 
   ctx.font="13px Arial";
   ctx.textAlign="right";
   ctx.textBaseline="middle";
 
-  for(let i=0;i<=divisionsY;i++){
+  for(let i=0;i<=divisions;i++){
 
     const valorY=
-      (maxY/divisionsY)*i;
+      (maxY/divisions)*i;
 
     const y=
       coordY(valorY);
@@ -1760,141 +2733,19 @@ function generarPoligonFrequencies(){
       y
     );
   }
+}
 
-  /* EIXOS */
 
-  const origenY=coordY(0);
-
-  ctx.strokeStyle="#374151";
-  ctx.lineWidth=2;
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    marge.esquerra,
-    marge.superior
-  );
-
-  ctx.lineTo(
-    marge.esquerra,
-    origenY
-  );
-
-  ctx.lineTo(
-    W-marge.dreta,
-    origenY
-  );
-
-  ctx.stroke();
-
-  /*
-    MARQUES DE L'EIX X
-
-    Important:
-    cada valor es col·loca segons la seva
-    posició numèrica real.
-  */
-
-  ctx.textAlign="center";
-  ctx.textBaseline="top";
-  ctx.font="13px Arial";
-
-  dades.forEach(dada=>{
-
-    const x=coordX(dada.valor);
-
-    ctx.strokeStyle="#374151";
-    ctx.lineWidth=1;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x,
-      origenY
-    );
-
-    ctx.lineTo(
-      x,
-      origenY+6
-    );
-
-    ctx.stroke();
-
-    ctx.fillStyle="#374151";
-
-    ctx.fillText(
-      formatNumero(dada.valor),
-      x,
-      origenY+10
-    );
-  });
-
-  /* POLÍGON */
-
-  if(dades.length>0){
-
-    ctx.beginPath();
-
-    dades.forEach((dada,index)=>{
-
-      const x=coordX(dada.valor);
-      const y=coordY(dada.frequencia);
-
-      if(index===0){
-        ctx.moveTo(x,y);
-      }else{
-        ctx.lineTo(x,y);
-      }
-    });
-
-    ctx.strokeStyle="#2563eb";
-    ctx.lineWidth=3;
-    ctx.lineJoin="round";
-    ctx.lineCap="round";
-    ctx.stroke();
-  }
-
-  /* PUNTS */
-
-  dades.forEach(dada=>{
-
-    const x=coordX(dada.valor);
-    const y=coordY(dada.frequencia);
-
-    ctx.beginPath();
-
-    ctx.arc(
-      x,
-      y,
-      6,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fillStyle="#2563eb";
-    ctx.fill();
-
-    ctx.strokeStyle="#ffffff";
-    ctx.lineWidth=2;
-    ctx.stroke();
-
-    /*
-      Freqüència sobre cada punt
-    */
-
-    ctx.fillStyle="#1f2937";
-    ctx.font="bold 14px Arial";
-    ctx.textAlign="center";
-    ctx.textBaseline="bottom";
-
-    ctx.fillText(
-      dada.frequencia,
-      x,
-      y-10
-    );
-  });
-
-  /* NOM EIX X */
+function dibuixarNomsEixos(
+  ctx,
+  W,
+  H,
+  marge,
+  ampladaGrafic,
+  alcadaGrafic,
+  nomX,
+  nomY
+){
 
   ctx.fillStyle="#1f2937";
   ctx.font="bold 14px Arial";
@@ -1902,44 +2753,38 @@ function generarPoligonFrequencies(){
   ctx.textBaseline="bottom";
 
   ctx.fillText(
-    "Valor de la variable (xᵢ)",
-    marge.esquerra+ampladaGrafic/2,
+    nomX,
+    marge.esquerra+
+    ampladaGrafic/2,
     H-5
   );
-
-  /* NOM EIX Y */
 
   ctx.save();
 
   ctx.translate(
     18,
-    marge.superior+alcadaGrafic/2
+    marge.superior+
+    alcadaGrafic/2
   );
 
   ctx.rotate(-Math.PI/2);
 
   ctx.textAlign="center";
   ctx.textBaseline="top";
-  ctx.font="bold 14px Arial";
 
   ctx.fillText(
-    "Freqüència absoluta (nᵢ)",
+    nomY,
     0,
     0
   );
 
   ctx.restore();
-
-  zona.classList.remove("hidden");
-
-  zona.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  });
 }
 
 
-/* FORMATS */
+/* ==============================
+   FORMATS
+   ============================== */
 
 function formatDecimal(numero){
 
@@ -1987,9 +2832,18 @@ function formatNumero(numero){
 }
 
 
+function netejarPrecisio(numero){
+
+  return Number(
+    numero.toFixed(10)
+  );
+}
+
+
 function mostrarError(missatge){
 
-  const error=document.getElementById("error");
+  const error=
+    document.getElementById("error");
 
   error.textContent=missatge;
 
