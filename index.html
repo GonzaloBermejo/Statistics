@@ -183,7 +183,6 @@
       border-radius: 7px;
     }
 
-
     /* MISSATGES PEDAGÒGICS */
 
     .pedagogic {
@@ -208,7 +207,6 @@
       border-left: 5px solid #f59e0b;
     }
 
-
     /* MODA */
 
     .moda-box {
@@ -229,7 +227,6 @@
       font-size: 1.08rem;
     }
 
-
     /* ZONA GRÀFICS */
 
     .zona-grafic {
@@ -249,7 +246,6 @@
       color: #6b7280;
       margin-bottom: 25px;
     }
-
 
     /* DIAGRAMA DE BARRES */
 
@@ -356,7 +352,6 @@
       z-index: 0;
     }
 
-
     /* DIAGRAMA DE SECTORS */
 
     .pie-layout {
@@ -400,9 +395,7 @@
       min-width: 70px;
     }
 
-
     @media (max-width: 700px) {
-
       .container {
         width: 96%;
         margin-top: 20px;
@@ -433,7 +426,6 @@
   </style>
 </head>
 
-
 <body>
 
 <div class="container">
@@ -443,7 +435,6 @@
   <div class="subtitle">
     Crea una taula de freqüències a partir de les teves dades
   </div>
-
 
   <!-- PAS 1 -->
 
@@ -477,7 +468,6 @@
 
   </div>
 
-
   <!-- PAS 2 -->
 
   <div class="card">
@@ -487,7 +477,6 @@
     <p>
       Escriu els valors de la variable i la seva freqüència absoluta.
     </p>
-
 
     <!-- AVÍS ORDINAL -->
 
@@ -506,194 +495,97 @@
 
     </div>
 
-
     <table>
 
       <thead>
-
         <tr>
-
-          <th>
-            Valor de la variable (xᵢ)
-          </th>
-
-          <th>
-            Freqüència absoluta (nᵢ)
-          </th>
-
+          <th>Valor de la variable (xᵢ)</th>
+          <th>Freqüència absoluta (nᵢ)</th>
           <th></th>
-
         </tr>
-
       </thead>
-
 
       <tbody id="filesEntrada">
 
         <tr>
-
           <td>
-            <input
-              type="text"
-              class="valor"
-              placeholder="Valor">
+            <input type="text" class="valor" placeholder="Valor">
           </td>
-
           <td>
-            <input
-              type="number"
-              class="frequencia"
-              min="0"
-              step="1"
-              placeholder="0">
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
           </td>
-
           <td>
-            <button
-              class="danger"
-              onclick="eliminarFila(this)">
-              ✕
-            </button>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
           </td>
-
         </tr>
 
-
         <tr>
-
           <td>
-            <input
-              type="text"
-              class="valor"
-              placeholder="Valor">
+            <input type="text" class="valor" placeholder="Valor">
           </td>
-
           <td>
-            <input
-              type="number"
-              class="frequencia"
-              min="0"
-              step="1"
-              placeholder="0">
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
           </td>
-
           <td>
-            <button
-              class="danger"
-              onclick="eliminarFila(this)">
-              ✕
-            </button>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
           </td>
-
         </tr>
 
-
         <tr>
-
           <td>
-            <input
-              type="text"
-              class="valor"
-              placeholder="Valor">
+            <input type="text" class="valor" placeholder="Valor">
           </td>
-
           <td>
-            <input
-              type="number"
-              class="frequencia"
-              min="0"
-              step="1"
-              placeholder="0">
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
           </td>
-
           <td>
-            <button
-              class="danger"
-              onclick="eliminarFila(this)">
-              ✕
-            </button>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
           </td>
-
         </tr>
 
       </tbody>
 
     </table>
 
-
     <div class="buttons">
-
-      <button
-        class="secondary"
-        onclick="afegirFila()">
-
+      <button class="secondary" onclick="afegirFila()">
         + Afegir valor
-
       </button>
-
     </div>
 
-
-    <button
-      class="generate"
-      onclick="generarTaula()">
-
+    <button class="generate" onclick="generarTaula()">
       Generar taula de freqüències
-
     </button>
 
-
-    <div
-      id="error"
-      class="error hidden">
-    </div>
+    <div id="error" class="error hidden"></div>
 
   </div>
 
-
   <!-- PAS 3 -->
 
-  <div
-    id="resultats"
-    class="card hidden">
+  <div id="resultats" class="card hidden">
 
     <h2>3. Taula de freqüències</h2>
 
-
     <table>
-
       <thead id="capResultats"></thead>
-
       <tbody id="cosResultats"></tbody>
-
       <tfoot id="peuResultats"></tfoot>
-
     </table>
 
-
-    <div
-      id="total"
-      class="total">
-    </div>
-
+    <div id="total" class="total"></div>
 
     <!-- MODA -->
 
-    <div
-      id="moda"
-      class="moda-box hidden">
+    <div id="moda" class="moda-box hidden">
 
       <div class="moda-title">
         Moda
       </div>
 
-      <div
-        id="resultatModa"
-        class="moda-resultat">
-      </div>
+      <div id="resultatModa" class="moda-resultat"></div>
 
     </div>
-
 
     <!-- EXPLICACIÓ NOMINAL -->
 
@@ -713,7 +605,6 @@
       <strong>no té significat estadístic</strong>.
 
     </div>
-
 
     <!-- EXPLICACIÓ ORDINAL -->
 
@@ -736,33 +627,19 @@
 
   </div>
 
-
   <!-- PAS 4 -->
 
-  <div
-    id="grafics"
-    class="card hidden">
+  <div id="grafics" class="card hidden">
 
     <h2>4. Gràfics disponibles</h2>
 
+    <div id="infoGrafics" class="graph-info"></div>
 
-    <div
-      id="infoGrafics"
-      class="graph-info">
-    </div>
-
-
-    <div
-      id="botonsGrafics"
-      class="graph-buttons">
-    </div>
-
+    <div id="botonsGrafics" class="graph-buttons"></div>
 
     <!-- DIAGRAMA DE BARRES -->
 
-    <div
-      id="zonaBarres"
-      class="zona-grafic hidden">
+    <div id="zonaBarres" class="zona-grafic hidden">
 
       <h3 class="grafic-titol">
         Diagrama de barres
@@ -772,12 +649,9 @@
         Freqüència absoluta
       </div>
 
-
       <div class="chart-wrapper">
 
-        <div
-          id="chart"
-          class="chart">
+        <div id="chart" class="chart">
 
           <div class="y-label">
             Freqüència absoluta
@@ -787,15 +661,11 @@
             Valor de la variable
           </div>
 
-          <div
-            id="bars"
-            class="bars">
-          </div>
+          <div id="bars" class="bars"></div>
 
         </div>
 
       </div>
-
 
       <!-- AVÍS SOBRE L'ORDRE NOMINAL -->
 
@@ -820,12 +690,9 @@
 
     </div>
 
-
     <!-- DIAGRAMA DE SECTORS -->
 
-    <div
-      id="zonaSectors"
-      class="zona-grafic hidden">
+    <div id="zonaSectors" class="zona-grafic hidden">
 
       <h3 class="grafic-titol">
         Diagrama de sectors
@@ -835,7 +702,6 @@
         Distribució percentual
       </div>
 
-
       <div class="pie-layout">
 
         <canvas
@@ -844,10 +710,7 @@
           height="420">
         </canvas>
 
-        <div
-          id="pieLegend"
-          class="legend">
-        </div>
+        <div id="pieLegend" class="legend"></div>
 
       </div>
 
@@ -856,7 +719,6 @@
   </div>
 
 </div>
-
 
 <script>
 
@@ -877,9 +739,7 @@ function actualitzarAjudaEntrada() {
   const avisOrdinal =
     document.getElementById("avisOrdinalEntrada");
 
-
   avisOrdinal.classList.add("hidden");
-
 
   if (tipus === "ordinal") {
     avisOrdinal.classList.remove("hidden");
@@ -896,56 +756,45 @@ function afegirFila() {
   const tbody =
     document.getElementById("filesEntrada");
 
-
   const fila =
     document.createElement("tr");
-
 
   fila.innerHTML = `
 
     <td>
-
       <input
         type="text"
         class="valor"
         placeholder="Valor">
-
     </td>
 
     <td>
-
       <input
         type="number"
         class="frequencia"
         min="0"
         step="1"
         placeholder="0">
-
     </td>
 
     <td>
-
       <button
         class="danger"
         onclick="eliminarFila(this)">
         ✕
       </button>
-
     </td>
 
   `;
 
-
   tbody.appendChild(fila);
 }
-
 
 
 function eliminarFila(boto) {
 
   const files =
     document.querySelectorAll("#filesEntrada tr");
-
 
   if (files.length > 1) {
     boto.closest("tr").remove();
@@ -962,13 +811,10 @@ function generarTaula() {
   const tipus =
     document.getElementById("tipusVariable").value;
 
-
   const error =
     document.getElementById("error");
 
-
   error.classList.add("hidden");
-
 
   if (!tipus) {
 
@@ -979,23 +825,18 @@ function generarTaula() {
     return;
   }
 
-
   const files =
     document.querySelectorAll("#filesEntrada tr");
 
-
   let dades = [];
-
 
   for (const fila of files) {
 
     const valor =
       fila.querySelector(".valor").value.trim();
 
-
     const frequenciaText =
       fila.querySelector(".frequencia").value;
-
 
     if (
       valor === "" &&
@@ -1004,10 +845,8 @@ function generarTaula() {
       continue;
     }
 
-
     const frequencia =
       Number(frequenciaText);
-
 
     if (valor === "") {
 
@@ -1017,7 +856,6 @@ function generarTaula() {
 
       return;
     }
-
 
     if (
       frequenciaText === "" ||
@@ -1032,13 +870,11 @@ function generarTaula() {
       return;
     }
 
-
     dades.push({
       valor: valor,
       frequencia: frequencia
     });
   }
-
 
   if (dades.length === 0) {
 
@@ -1049,14 +885,12 @@ function generarTaula() {
     return;
   }
 
-
   const N =
     dades.reduce(
       (suma, dada) =>
         suma + dada.frequencia,
       0
     );
-
 
   if (N === 0) {
 
@@ -1067,11 +901,9 @@ function generarTaula() {
     return;
   }
 
-
   dadesActuals = dades;
   totalActual = N;
   tipusActual = tipus;
-
 
   construirTaula(
     dades,
@@ -1079,14 +911,11 @@ function generarTaula() {
     tipus
   );
 
-
   mostrarGrafics(tipus);
-
 
   document
     .getElementById("zonaBarres")
     .classList.add("hidden");
-
 
   document
     .getElementById("zonaSectors")
@@ -1113,11 +942,9 @@ function construirTaula(
   const tfoot =
     document.getElementById("peuResultats");
 
-
   thead.innerHTML = "";
   tbody.innerHTML = "";
   tfoot.innerHTML = "";
-
 
   /*
     Les variables nominals
@@ -1126,7 +953,6 @@ function construirTaula(
 
   const teAcumulades =
     tipus !== "nominal";
-
 
   if (teAcumulades) {
 
@@ -1189,10 +1015,8 @@ function construirTaula(
     `;
   }
 
-
   let absolutaAcumulada = 0;
   let relativaAcumulada = 0;
-
 
   dades.forEach(
     (dada, index) => {
@@ -1200,26 +1024,20 @@ function construirTaula(
       const relativa =
         dada.frequencia / N;
 
-
       const percentatge =
         relativa * 100;
-
 
       absolutaAcumulada +=
         dada.frequencia;
 
-
       relativaAcumulada +=
         relativa;
-
 
       const ultima =
         index === dades.length - 1;
 
-
       const fila =
         document.createElement("tr");
-
 
       if (teAcumulades) {
 
@@ -1286,21 +1104,17 @@ function construirTaula(
         `;
       }
 
-
       tbody.appendChild(fila);
     }
   );
-
 
   /* FILA TOTAL */
 
   const filaTotal =
     document.createElement("tr");
 
-
   filaTotal.className =
     "total-row";
-
 
   if (teAcumulades) {
 
@@ -1339,13 +1153,10 @@ function construirTaula(
     `;
   }
 
-
   tfoot.appendChild(filaTotal);
-
 
   document.getElementById("total").innerHTML =
     `Nombre total d'individus: N = ${N}`;
-
 
   /* MISSATGES */
 
@@ -1358,27 +1169,23 @@ function construirTaula(
   const moda =
     document.getElementById("moda");
 
-
   missatgeNominal.classList.add("hidden");
-
   missatgeOrdinal.classList.add("hidden");
-
   moda.classList.add("hidden");
-
 
   if (tipus === "nominal") {
 
     missatgeNominal.classList.remove("hidden");
 
-    mostrarModaNominal(dades);
+    mostrarModa(dades);
   }
-
 
   if (tipus === "ordinal") {
 
     missatgeOrdinal.classList.remove("hidden");
-  }
 
+    mostrarModa(dades);
+  }
 
   document
     .getElementById("resultats")
@@ -1387,17 +1194,16 @@ function construirTaula(
 
 
 /* ===============================
-   MODA QUALITATIVA NOMINAL
+   MODA
    =============================== */
 
-function mostrarModaNominal(dades) {
+function mostrarModa(dades) {
 
   const modaBox =
     document.getElementById("moda");
 
   const resultat =
     document.getElementById("resultatModa");
-
 
   const frequenciaMaxima =
     Math.max(
@@ -1406,20 +1212,12 @@ function mostrarModaNominal(dades) {
       )
     );
 
-
   const modes =
     dades.filter(
       dada =>
         dada.frequencia ===
         frequenciaMaxima
     );
-
-
-  /*
-    Si totes les categories tenen
-    exactament la mateixa freqüència,
-    no destaquem cap categoria com a moda.
-  */
 
   if (modes.length === dades.length) {
 
@@ -1444,13 +1242,11 @@ function mostrarModaNominal(dades) {
         .map(dada => dada.valor)
         .join(", ");
 
-
     resultat.innerHTML = `
       <strong>${nomsModes}</strong>
       (${frequenciaMaxima} individus cadascuna)
     `;
   }
-
 
   modaBox.classList.remove("hidden");
 }
@@ -1468,10 +1264,8 @@ function mostrarGrafics(tipus) {
   const botons =
     document.getElementById("botonsGrafics");
 
-
   let nomTipus = "";
   let grafics = [];
-
 
   if (tipus === "nominal") {
 
@@ -1484,17 +1278,16 @@ function mostrarGrafics(tipus) {
     ];
   }
 
-
   if (tipus === "ordinal") {
 
     nomTipus =
       "qualitativa ordinal";
 
     grafics = [
-      "Diagrama de barres"
+      "Diagrama de barres",
+      "Diagrama de sectors"
     ];
   }
-
 
   if (tipus === "discreta") {
 
@@ -1506,7 +1299,6 @@ function mostrarGrafics(tipus) {
     ];
   }
 
-
   if (tipus === "continua") {
 
     nomTipus =
@@ -1514,7 +1306,6 @@ function mostrarGrafics(tipus) {
 
     grafics = [];
   }
-
 
   info.innerHTML = `
 
@@ -1524,9 +1315,7 @@ function mostrarGrafics(tipus) {
 
   `;
 
-
   botons.innerHTML = "";
-
 
   if (grafics.length === 0) {
 
@@ -1549,14 +1338,11 @@ function mostrarGrafics(tipus) {
         const boto =
           document.createElement("button");
 
-
         boto.className =
           "graph-button";
 
-
         boto.textContent =
           grafic;
-
 
         if (
           grafic ===
@@ -1567,7 +1353,6 @@ function mostrarGrafics(tipus) {
             generarDiagramaBarres;
         }
 
-
         if (
           grafic ===
           "Diagrama de sectors"
@@ -1577,12 +1362,10 @@ function mostrarGrafics(tipus) {
             generarDiagramaSectors;
         }
 
-
         botons.appendChild(boto);
       }
     );
   }
-
 
   document
     .getElementById("grafics")
@@ -1600,7 +1383,6 @@ function generarDiagramaBarres() {
     .getElementById("zonaSectors")
     .classList.add("hidden");
 
-
   const zona =
     document.getElementById("zonaBarres");
 
@@ -1615,12 +1397,9 @@ function generarDiagramaBarres() {
       "avisOrdreBarresNominal"
     );
 
-
   bars.innerHTML = "";
 
-
   avisOrdre.classList.add("hidden");
-
 
   chart
     .querySelectorAll(
@@ -1630,23 +1409,16 @@ function generarDiagramaBarres() {
       element => element.remove()
     );
 
-
   /*
-    Per a les variables nominals,
-    ordenem les categories de major
-    a menor freqüència.
+    NOMINAL:
+    ordenem de major a menor freqüència.
 
-    slice() crea una còpia perquè
-    la taula original no canviï d'ordre.
-
-    sort() és estable en JavaScript modern:
-    en cas d'empat es conserva l'ordre
-    d'introducció.
+    ORDINAL:
+    conservem l'ordre natural introduït.
   */
 
   let dadesGrafic =
     [...dadesActuals];
-
 
   if (tipusActual === "nominal") {
 
@@ -1656,10 +1428,8 @@ function generarDiagramaBarres() {
         a.frequencia
     );
 
-
     avisOrdre.classList.remove("hidden");
   }
-
 
   const maxFreq =
     Math.max(
@@ -1668,18 +1438,14 @@ function generarDiagramaBarres() {
       )
     );
 
-
   let escalaMax =
     Math.ceil(maxFreq * 1.15);
-
 
   if (escalaMax < 5) {
     escalaMax = 5;
   }
 
-
   const divisions = 5;
-
 
   for (
     let i = 0;
@@ -1690,44 +1456,34 @@ function generarDiagramaBarres() {
     const valor =
       (escalaMax / divisions) * i;
 
-
     const posicio =
       (valor / escalaMax) * 100;
-
 
     const linea =
       document.createElement("div");
 
-
     linea.className =
       "grid-line";
-
 
     linea.style.bottom =
       posicio + "%";
 
-
     const etiqueta =
       document.createElement("div");
-
 
     etiqueta.className =
       "y-scale";
 
-
     etiqueta.style.bottom =
       posicio + "%";
 
-
     etiqueta.textContent =
       formatEscala(valor);
-
 
     chart.appendChild(linea);
 
     chart.appendChild(etiqueta);
   }
-
 
   dadesGrafic.forEach(
     dada => {
@@ -1735,18 +1491,14 @@ function generarDiagramaBarres() {
       const columna =
         document.createElement("div");
 
-
       columna.className =
         "bar-column";
-
 
       const barra =
         document.createElement("div");
 
-
       barra.className =
         "bar";
-
 
       const altura =
         (
@@ -1754,34 +1506,26 @@ function generarDiagramaBarres() {
           escalaMax
         ) * 100;
 
-
       barra.style.height =
         altura + "%";
-
 
       const freq =
         document.createElement("div");
 
-
       freq.className =
         "bar-frequency";
-
 
       freq.textContent =
         dada.frequencia;
 
-
       const valor =
         document.createElement("div");
-
 
       valor.className =
         "bar-value";
 
-
       valor.textContent =
         dada.valor;
-
 
       barra.appendChild(freq);
 
@@ -1793,9 +1537,7 @@ function generarDiagramaBarres() {
     }
   );
 
-
   zona.classList.remove("hidden");
-
 
   zona.scrollIntoView({
     behavior: "smooth",
@@ -1814,22 +1556,17 @@ function generarDiagramaSectors() {
     .getElementById("zonaBarres")
     .classList.add("hidden");
 
-
   const zona =
     document.getElementById("zonaSectors");
-
 
   const canvas =
     document.getElementById("pieCanvas");
 
-
   const ctx =
     canvas.getContext("2d");
 
-
   const legend =
     document.getElementById("pieLegend");
-
 
   ctx.clearRect(
     0,
@@ -1838,9 +1575,7 @@ function generarDiagramaSectors() {
     canvas.height
   );
 
-
   legend.innerHTML = "";
-
 
   const colors = [
     "#2563eb",
@@ -1855,14 +1590,11 @@ function generarDiagramaSectors() {
     "#84cc16"
   ];
 
-
   const centreX =
     canvas.width / 2;
 
-
   const centreY =
     canvas.height / 2;
-
 
   const radi =
     Math.min(
@@ -1870,10 +1602,16 @@ function generarDiagramaSectors() {
       canvas.height
     ) * 0.40;
 
-
   let angleInicial =
     -Math.PI / 2;
 
+  /*
+    Fem servir dadesActuals directament.
+
+    Això fa que, en una variable ordinal,
+    tant els sectors com la llegenda
+    conservin l'ordre natural introduït.
+  */
 
   dadesActuals.forEach(
     (dada, index) => {
@@ -1882,34 +1620,28 @@ function generarDiagramaSectors() {
         dada.frequencia /
         totalActual;
 
-
       const angle =
         proporcio *
         Math.PI *
         2;
 
-
       const angleFinal =
         angleInicial +
         angle;
-
 
       const color =
         colors[
           index % colors.length
         ];
 
-
       /* SECTOR */
 
       ctx.beginPath();
-
 
       ctx.moveTo(
         centreX,
         centreY
       );
-
 
       ctx.arc(
         centreX,
@@ -1919,33 +1651,25 @@ function generarDiagramaSectors() {
         angleFinal
       );
 
-
       ctx.closePath();
-
 
       ctx.fillStyle =
         color;
 
-
       ctx.fill();
-
 
       ctx.strokeStyle =
         "#ffffff";
 
-
       ctx.lineWidth =
         3;
 
-
       ctx.stroke();
-
 
       /* PERCENTATGE */
 
       const percentatge =
         proporcio * 100;
-
 
       if (percentatge >= 5) {
 
@@ -1953,38 +1677,30 @@ function generarDiagramaSectors() {
           angleInicial +
           angle / 2;
 
-
         const distancia =
           radi * 0.62;
-
 
         const textX =
           centreX +
           Math.cos(angleMig) *
           distancia;
 
-
         const textY =
           centreY +
           Math.sin(angleMig) *
           distancia;
 
-
         ctx.fillStyle =
           "#ffffff";
-
 
         ctx.font =
           "bold 17px Arial";
 
-
         ctx.textAlign =
           "center";
 
-
         ctx.textBaseline =
           "middle";
-
 
         ctx.fillText(
           formatPercentatge(
@@ -1995,36 +1711,28 @@ function generarDiagramaSectors() {
         );
       }
 
-
       /* LLEGENDA */
 
       const item =
         document.createElement("div");
 
-
       item.className =
         "legend-item";
-
 
       const quadrat =
         document.createElement("div");
 
-
       quadrat.className =
         "legend-color";
-
 
       quadrat.style.background =
         color;
 
-
       const text =
         document.createElement("div");
 
-
       text.className =
         "legend-text";
-
 
       text.innerHTML = `
 
@@ -2038,22 +1746,18 @@ function generarDiagramaSectors() {
 
       `;
 
-
       item.appendChild(quadrat);
 
       item.appendChild(text);
 
       legend.appendChild(item);
 
-
       angleInicial =
         angleFinal;
     }
   );
 
-
   zona.classList.remove("hidden");
-
 
   zona.scrollIntoView({
     behavior: "smooth",
@@ -2076,7 +1780,6 @@ function formatDecimal(numero) {
 }
 
 
-
 function formatPercentatge(numero) {
 
   return numero
@@ -2087,13 +1790,11 @@ function formatPercentatge(numero) {
 }
 
 
-
 function formatEscala(numero) {
 
   if (Number.isInteger(numero)) {
     return numero;
   }
-
 
   return numero
     .toFixed(1)
@@ -2101,16 +1802,13 @@ function formatEscala(numero) {
 }
 
 
-
 function mostrarError(missatge) {
 
   const error =
     document.getElementById("error");
 
-
   error.textContent =
     missatge;
-
 
   error.classList.remove("hidden");
 }
