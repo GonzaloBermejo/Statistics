@@ -209,7 +209,28 @@
     }
 
 
-    /* DIAGRAMA DE BARRES */
+    /* MODA */
+
+    .moda-box {
+      margin-top: 20px;
+      padding: 17px 19px;
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      border-radius: 9px;
+      line-height: 1.5;
+    }
+
+    .moda-title {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .moda-resultat {
+      font-size: 1.08rem;
+    }
+
+
+    /* ZONA GRÀFICS */
 
     .zona-grafic {
       margin-top: 30px;
@@ -228,6 +249,9 @@
       color: #6b7280;
       margin-bottom: 25px;
     }
+
+
+    /* DIAGRAMA DE BARRES */
 
     .chart-wrapper {
       width: 100%;
@@ -291,6 +315,7 @@
       border-radius: 5px 5px 0 0;
       position: relative;
       min-height: 2px;
+      transition: 0.2s;
     }
 
     .bar:hover {
@@ -377,6 +402,7 @@
 
 
     @media (max-width: 700px) {
+
       .container {
         width: 96%;
         margin-top: 20px;
@@ -426,11 +452,27 @@
     <h2>1. Quin tipus de variable estadística tens?</h2>
 
     <select id="tipusVariable" onchange="actualitzarAjudaEntrada()">
-      <option value="">Selecciona una opció...</option>
-      <option value="nominal">Qualitativa nominal</option>
-      <option value="ordinal">Qualitativa ordinal</option>
-      <option value="discreta">Quantitativa discreta</option>
-      <option value="continua">Quantitativa contínua</option>
+
+      <option value="">
+        Selecciona una opció...
+      </option>
+
+      <option value="nominal">
+        Qualitativa nominal
+      </option>
+
+      <option value="ordinal">
+        Qualitativa ordinal
+      </option>
+
+      <option value="discreta">
+        Quantitativa discreta
+      </option>
+
+      <option value="continua">
+        Quantitativa contínua
+      </option>
+
     </select>
 
   </div>
@@ -446,16 +488,20 @@
       Escriu els valors de la variable i la seva freqüència absoluta.
     </p>
 
-    <!-- AVÍS PREVI PER A ORDINALS -->
 
-    <div id="avisOrdinalEntrada" class="pedagogic ordinal hidden">
+    <!-- AVÍS ORDINAL -->
+
+    <div
+      id="avisOrdinalEntrada"
+      class="pedagogic ordinal hidden">
 
       <div class="pedagogic-title">
         ⚠️ L'ordre de les categories és important
       </div>
 
       Com que és una variable qualitativa ordinal,
-      introdueix les categories <strong>en el seu ordre natural</strong>,
+      introdueix les categories
+      <strong>en el seu ordre natural</strong>,
       de menor a major.
 
     </div>
@@ -464,31 +510,110 @@
     <table>
 
       <thead>
+
         <tr>
-          <th>Valor de la variable (xᵢ)</th>
-          <th>Freqüència absoluta (nᵢ)</th>
+
+          <th>
+            Valor de la variable (xᵢ)
+          </th>
+
+          <th>
+            Freqüència absoluta (nᵢ)
+          </th>
+
           <th></th>
+
         </tr>
+
       </thead>
+
 
       <tbody id="filesEntrada">
 
         <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
+
+          <td>
+            <input
+              type="text"
+              class="valor"
+              placeholder="Valor">
+          </td>
+
+          <td>
+            <input
+              type="number"
+              class="frequencia"
+              min="0"
+              step="1"
+              placeholder="0">
+          </td>
+
+          <td>
+            <button
+              class="danger"
+              onclick="eliminarFila(this)">
+              ✕
+            </button>
+          </td>
+
         </tr>
 
-        <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
-        </tr>
 
         <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
+
+          <td>
+            <input
+              type="text"
+              class="valor"
+              placeholder="Valor">
+          </td>
+
+          <td>
+            <input
+              type="number"
+              class="frequencia"
+              min="0"
+              step="1"
+              placeholder="0">
+          </td>
+
+          <td>
+            <button
+              class="danger"
+              onclick="eliminarFila(this)">
+              ✕
+            </button>
+          </td>
+
+        </tr>
+
+
+        <tr>
+
+          <td>
+            <input
+              type="text"
+              class="valor"
+              placeholder="Valor">
+          </td>
+
+          <td>
+            <input
+              type="number"
+              class="frequencia"
+              min="0"
+              step="1"
+              placeholder="0">
+          </td>
+
+          <td>
+            <button
+              class="danger"
+              onclick="eliminarFila(this)">
+              ✕
+            </button>
+          </td>
+
         </tr>
 
       </tbody>
@@ -498,27 +623,42 @@
 
     <div class="buttons">
 
-      <button class="secondary" onclick="afegirFila()">
+      <button
+        class="secondary"
+        onclick="afegirFila()">
+
         + Afegir valor
+
       </button>
 
     </div>
 
 
-    <button class="generate" onclick="generarTaula()">
+    <button
+      class="generate"
+      onclick="generarTaula()">
+
       Generar taula de freqüències
+
     </button>
 
-    <div id="error" class="error hidden"></div>
+
+    <div
+      id="error"
+      class="error hidden">
+    </div>
 
   </div>
 
 
   <!-- PAS 3 -->
 
-  <div id="resultats" class="card hidden">
+  <div
+    id="resultats"
+    class="card hidden">
 
     <h2>3. Taula de freqüències</h2>
+
 
     <table>
 
@@ -530,19 +670,45 @@
 
     </table>
 
-    <div id="total" class="total"></div>
+
+    <div
+      id="total"
+      class="total">
+    </div>
+
+
+    <!-- MODA -->
+
+    <div
+      id="moda"
+      class="moda-box hidden">
+
+      <div class="moda-title">
+        Moda
+      </div>
+
+      <div
+        id="resultatModa"
+        class="moda-resultat">
+      </div>
+
+    </div>
 
 
     <!-- EXPLICACIÓ NOMINAL -->
 
-    <div id="missatgeNominal" class="pedagogic nominal hidden">
+    <div
+      id="missatgeNominal"
+      class="pedagogic nominal hidden">
 
       <div class="pedagogic-title">
         💡 Per què no apareixen freqüències acumulades?
       </div>
 
-      En una variable <strong>qualitativa nominal</strong>,
+      En una variable
+      <strong>qualitativa nominal</strong>,
       les categories no tenen un ordre natural.
+
       Per tant, acumular les freqüències
       <strong>no té significat estadístic</strong>.
 
@@ -551,14 +717,18 @@
 
     <!-- EXPLICACIÓ ORDINAL -->
 
-    <div id="missatgeOrdinal" class="pedagogic ordinal hidden">
+    <div
+      id="missatgeOrdinal"
+      class="pedagogic ordinal hidden">
 
       <div class="pedagogic-title">
         💡 En aquest cas sí que podem acumular les freqüències
       </div>
 
-      En una variable <strong>qualitativa ordinal</strong>,
+      En una variable
+      <strong>qualitativa ordinal</strong>,
       les categories tenen un ordre natural.
+
       Per això les freqüències acumulades
       <strong>sí que tenen significat</strong>.
 
@@ -569,18 +739,30 @@
 
   <!-- PAS 4 -->
 
-  <div id="grafics" class="card hidden">
+  <div
+    id="grafics"
+    class="card hidden">
 
     <h2>4. Gràfics disponibles</h2>
 
-    <div id="infoGrafics" class="graph-info"></div>
 
-    <div id="botonsGrafics" class="graph-buttons"></div>
+    <div
+      id="infoGrafics"
+      class="graph-info">
+    </div>
 
 
-    <!-- BARRES -->
+    <div
+      id="botonsGrafics"
+      class="graph-buttons">
+    </div>
 
-    <div id="zonaBarres" class="zona-grafic hidden">
+
+    <!-- DIAGRAMA DE BARRES -->
+
+    <div
+      id="zonaBarres"
+      class="zona-grafic hidden">
 
       <h3 class="grafic-titol">
         Diagrama de barres
@@ -590,9 +772,12 @@
         Freqüència absoluta
       </div>
 
+
       <div class="chart-wrapper">
 
-        <div id="chart" class="chart">
+        <div
+          id="chart"
+          class="chart">
 
           <div class="y-label">
             Freqüència absoluta
@@ -602,18 +787,45 @@
             Valor de la variable
           </div>
 
-          <div id="bars" class="bars"></div>
+          <div
+            id="bars"
+            class="bars">
+          </div>
 
         </div>
+
+      </div>
+
+
+      <!-- AVÍS SOBRE L'ORDRE NOMINAL -->
+
+      <div
+        id="avisOrdreBarresNominal"
+        class="pedagogic nominal hidden">
+
+        <div class="pedagogic-title">
+          💡 L'ordre de les categories
+        </div>
+
+        En una variable
+        <strong>qualitativa nominal</strong>,
+        les categories no tenen un ordre natural.
+
+        En aquest diagrama s'han ordenat de
+        <strong>major a menor freqüència absoluta</strong>
+        per facilitar la lectura i la comparació
+        de les dades.
 
       </div>
 
     </div>
 
 
-    <!-- SECTORS -->
+    <!-- DIAGRAMA DE SECTORS -->
 
-    <div id="zonaSectors" class="zona-grafic hidden">
+    <div
+      id="zonaSectors"
+      class="zona-grafic hidden">
 
       <h3 class="grafic-titol">
         Diagrama de sectors
@@ -623,11 +835,19 @@
         Distribució percentual
       </div>
 
+
       <div class="pie-layout">
 
-        <canvas id="pieCanvas" width="420" height="420"></canvas>
+        <canvas
+          id="pieCanvas"
+          width="420"
+          height="420">
+        </canvas>
 
-        <div id="pieLegend" class="legend"></div>
+        <div
+          id="pieLegend"
+          class="legend">
+        </div>
 
       </div>
 
@@ -668,7 +888,7 @@ function actualitzarAjudaEntrada() {
 
 
 /* ===============================
-   FILES
+   FILES D'ENTRADA
    =============================== */
 
 function afegirFila() {
@@ -676,31 +896,56 @@ function afegirFila() {
   const tbody =
     document.getElementById("filesEntrada");
 
+
   const fila =
     document.createElement("tr");
 
+
   fila.innerHTML = `
+
     <td>
-      <input type="text" class="valor" placeholder="Valor">
+
+      <input
+        type="text"
+        class="valor"
+        placeholder="Valor">
+
     </td>
 
     <td>
-      <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+
+      <input
+        type="number"
+        class="frequencia"
+        min="0"
+        step="1"
+        placeholder="0">
+
     </td>
 
     <td>
-      <button class="danger" onclick="eliminarFila(this)">✕</button>
+
+      <button
+        class="danger"
+        onclick="eliminarFila(this)">
+        ✕
+      </button>
+
     </td>
+
   `;
+
 
   tbody.appendChild(fila);
 }
+
 
 
 function eliminarFila(boto) {
 
   const files =
     document.querySelectorAll("#filesEntrada tr");
+
 
   if (files.length > 1) {
     boto.closest("tr").remove();
@@ -717,8 +962,10 @@ function generarTaula() {
   const tipus =
     document.getElementById("tipusVariable").value;
 
+
   const error =
     document.getElementById("error");
+
 
   error.classList.add("hidden");
 
@@ -736,6 +983,7 @@ function generarTaula() {
   const files =
     document.querySelectorAll("#filesEntrada tr");
 
+
   let dades = [];
 
 
@@ -744,11 +992,15 @@ function generarTaula() {
     const valor =
       fila.querySelector(".valor").value.trim();
 
+
     const frequenciaText =
       fila.querySelector(".frequencia").value;
 
 
-    if (valor === "" && frequenciaText === "") {
+    if (
+      valor === "" &&
+      frequenciaText === ""
+    ) {
       continue;
     }
 
@@ -800,7 +1052,8 @@ function generarTaula() {
 
   const N =
     dades.reduce(
-      (suma, dada) => suma + dada.frequencia,
+      (suma, dada) =>
+        suma + dada.frequencia,
       0
     );
 
@@ -820,7 +1073,12 @@ function generarTaula() {
   tipusActual = tipus;
 
 
-  construirTaula(dades, N, tipus);
+  construirTaula(
+    dades,
+    N,
+    tipus
+  );
+
 
   mostrarGrafics(tipus);
 
@@ -828,6 +1086,7 @@ function generarTaula() {
   document
     .getElementById("zonaBarres")
     .classList.add("hidden");
+
 
   document
     .getElementById("zonaSectors")
@@ -839,7 +1098,11 @@ function generarTaula() {
    CONSTRUIR TAULA
    =============================== */
 
-function construirTaula(dades, N, tipus) {
+function construirTaula(
+  dades,
+  N,
+  tipus
+) {
 
   const thead =
     document.getElementById("capResultats");
@@ -856,6 +1119,11 @@ function construirTaula(dades, N, tipus) {
   tfoot.innerHTML = "";
 
 
+  /*
+    Les variables nominals
+    NO tenen freqüències acumulades.
+  */
+
   const teAcumulades =
     tipus !== "nominal";
 
@@ -863,25 +1131,61 @@ function construirTaula(dades, N, tipus) {
   if (teAcumulades) {
 
     thead.innerHTML = `
+
       <tr>
-        <th>Valor<br>xᵢ</th>
-        <th>Freq. absoluta<br>nᵢ</th>
-        <th>Freq. relativa<br>fᵢ</th>
-        <th>Percentatge<br>%</th>
-        <th>Freq. abs. acumulada<br>Nᵢ</th>
-        <th>Freq. rel. acumulada<br>Fᵢ</th>
+
+        <th>
+          Valor<br>xᵢ
+        </th>
+
+        <th>
+          Freq. absoluta<br>nᵢ
+        </th>
+
+        <th>
+          Freq. relativa<br>fᵢ
+        </th>
+
+        <th>
+          Percentatge<br>%
+        </th>
+
+        <th>
+          Freq. abs. acumulada<br>Nᵢ
+        </th>
+
+        <th>
+          Freq. rel. acumulada<br>Fᵢ
+        </th>
+
       </tr>
+
     `;
 
   } else {
 
     thead.innerHTML = `
+
       <tr>
-        <th>Valor<br>xᵢ</th>
-        <th>Freq. absoluta<br>nᵢ</th>
-        <th>Freq. relativa<br>fᵢ</th>
-        <th>Percentatge<br>%</th>
+
+        <th>
+          Valor<br>xᵢ
+        </th>
+
+        <th>
+          Freq. absoluta<br>nᵢ
+        </th>
+
+        <th>
+          Freq. relativa<br>fᵢ
+        </th>
+
+        <th>
+          Percentatge<br>%
+        </th>
+
       </tr>
+
     `;
   }
 
@@ -890,77 +1194,109 @@ function construirTaula(dades, N, tipus) {
   let relativaAcumulada = 0;
 
 
-  dades.forEach((dada, index) => {
+  dades.forEach(
+    (dada, index) => {
 
-    const relativa =
-      dada.frequencia / N;
-
-    const percentatge =
-      relativa * 100;
+      const relativa =
+        dada.frequencia / N;
 
 
-    absolutaAcumulada +=
-      dada.frequencia;
-
-    relativaAcumulada +=
-      relativa;
+      const percentatge =
+        relativa * 100;
 
 
-    const ultima =
-      index === dades.length - 1;
+      absolutaAcumulada +=
+        dada.frequencia;
 
 
-    const fila =
-      document.createElement("tr");
+      relativaAcumulada +=
+        relativa;
 
 
-    if (teAcumulades) {
+      const ultima =
+        index === dades.length - 1;
 
-      fila.innerHTML = `
-        <td>${dada.valor}</td>
 
-        <td>${dada.frequencia}</td>
+      const fila =
+        document.createElement("tr");
 
-        <td>${formatDecimal(relativa)}</td>
 
-        <td>${formatPercentatge(percentatge)} %</td>
+      if (teAcumulades) {
 
-        <td class="${ultima ? "final-acumulada" : ""}">
-          ${
-            ultima
-              ? absolutaAcumulada + " = N"
-              : absolutaAcumulada
-          }
-        </td>
+        fila.innerHTML = `
 
-        <td class="${ultima ? "final-acumulada" : ""}">
-          ${
-            ultima
-              ? "1"
-              : formatDecimal(relativaAcumulada)
-          }
-        </td>
-      `;
+          <td>
+            ${dada.valor}
+          </td>
 
-    } else {
+          <td>
+            ${dada.frequencia}
+          </td>
 
-      fila.innerHTML = `
-        <td>${dada.valor}</td>
-        <td>${dada.frequencia}</td>
-        <td>${formatDecimal(relativa)}</td>
-        <td>${formatPercentatge(percentatge)} %</td>
-      `;
+          <td>
+            ${formatDecimal(relativa)}
+          </td>
+
+          <td>
+            ${formatPercentatge(percentatge)} %
+          </td>
+
+          <td class="${ultima ? "final-acumulada" : ""}">
+
+            ${
+              ultima
+                ? absolutaAcumulada + " = N"
+                : absolutaAcumulada
+            }
+
+          </td>
+
+          <td class="${ultima ? "final-acumulada" : ""}">
+
+            ${
+              ultima
+                ? "1"
+                : formatDecimal(relativaAcumulada)
+            }
+
+          </td>
+
+        `;
+
+      } else {
+
+        fila.innerHTML = `
+
+          <td>
+            ${dada.valor}
+          </td>
+
+          <td>
+            ${dada.frequencia}
+          </td>
+
+          <td>
+            ${formatDecimal(relativa)}
+          </td>
+
+          <td>
+            ${formatPercentatge(percentatge)} %
+          </td>
+
+        `;
+      }
+
+
+      tbody.appendChild(fila);
     }
+  );
 
 
-    tbody.appendChild(fila);
-  });
-
-
-  /* TOTAL */
+  /* FILA TOTAL */
 
   const filaTotal =
     document.createElement("tr");
+
 
   filaTotal.className =
     "total-row";
@@ -969,21 +1305,37 @@ function construirTaula(dades, N, tipus) {
   if (teAcumulades) {
 
     filaTotal.innerHTML = `
+
       <td>TOTAL</td>
-      <td>${N} = N</td>
+
+      <td>
+        ${N} = N
+      </td>
+
       <td>1</td>
+
       <td>100 %</td>
+
       <td>—</td>
+
       <td>—</td>
+
     `;
 
   } else {
 
     filaTotal.innerHTML = `
+
       <td>TOTAL</td>
-      <td>${N} = N</td>
+
+      <td>
+        ${N} = N
+      </td>
+
       <td>1</td>
+
       <td>100 %</td>
+
     `;
   }
 
@@ -995,7 +1347,7 @@ function construirTaula(dades, N, tipus) {
     `Nombre total d'individus: N = ${N}`;
 
 
-  /* MISSATGES PEDAGÒGICS */
+  /* MISSATGES */
 
   const missatgeNominal =
     document.getElementById("missatgeNominal");
@@ -1003,17 +1355,27 @@ function construirTaula(dades, N, tipus) {
   const missatgeOrdinal =
     document.getElementById("missatgeOrdinal");
 
+  const moda =
+    document.getElementById("moda");
+
 
   missatgeNominal.classList.add("hidden");
+
   missatgeOrdinal.classList.add("hidden");
+
+  moda.classList.add("hidden");
 
 
   if (tipus === "nominal") {
+
     missatgeNominal.classList.remove("hidden");
+
+    mostrarModaNominal(dades);
   }
 
 
   if (tipus === "ordinal") {
+
     missatgeOrdinal.classList.remove("hidden");
   }
 
@@ -1021,6 +1383,76 @@ function construirTaula(dades, N, tipus) {
   document
     .getElementById("resultats")
     .classList.remove("hidden");
+}
+
+
+/* ===============================
+   MODA QUALITATIVA NOMINAL
+   =============================== */
+
+function mostrarModaNominal(dades) {
+
+  const modaBox =
+    document.getElementById("moda");
+
+  const resultat =
+    document.getElementById("resultatModa");
+
+
+  const frequenciaMaxima =
+    Math.max(
+      ...dades.map(
+        dada => dada.frequencia
+      )
+    );
+
+
+  const modes =
+    dades.filter(
+      dada =>
+        dada.frequencia ===
+        frequenciaMaxima
+    );
+
+
+  /*
+    Si totes les categories tenen
+    exactament la mateixa freqüència,
+    no destaquem cap categoria com a moda.
+  */
+
+  if (modes.length === dades.length) {
+
+    resultat.innerHTML = `
+      No hi ha una moda única:
+      totes les categories tenen
+      la mateixa freqüència
+      (${frequenciaMaxima}).
+    `;
+
+  } else if (modes.length === 1) {
+
+    resultat.innerHTML = `
+      <strong>${modes[0].valor}</strong>
+      (${frequenciaMaxima} individus)
+    `;
+
+  } else {
+
+    const nomsModes =
+      modes
+        .map(dada => dada.valor)
+        .join(", ");
+
+
+    resultat.innerHTML = `
+      <strong>${nomsModes}</strong>
+      (${frequenciaMaxima} individus cadascuna)
+    `;
+  }
+
+
+  modaBox.classList.remove("hidden");
 }
 
 
@@ -1085,9 +1517,11 @@ function mostrarGrafics(tipus) {
 
 
   info.innerHTML = `
+
     Com que la teva variable és
     <strong>${nomTipus}</strong>,
     aquests són els gràfics disponibles:
+
   `;
 
 
@@ -1097,38 +1531,56 @@ function mostrarGrafics(tipus) {
   if (grafics.length === 0) {
 
     botons.innerHTML = `
+
       <span>
+
         Properament afegirem gràfics
         per a aquest tipus de variable.
+
       </span>
+
     `;
 
   } else {
 
-    grafics.forEach(grafic => {
+    grafics.forEach(
+      grafic => {
 
-      const boto =
-        document.createElement("button");
-
-      boto.className =
-        "graph-button";
-
-      boto.textContent =
-        grafic;
+        const boto =
+          document.createElement("button");
 
 
-      if (grafic === "Diagrama de barres") {
-        boto.onclick = generarDiagramaBarres;
+        boto.className =
+          "graph-button";
+
+
+        boto.textContent =
+          grafic;
+
+
+        if (
+          grafic ===
+          "Diagrama de barres"
+        ) {
+
+          boto.onclick =
+            generarDiagramaBarres;
+        }
+
+
+        if (
+          grafic ===
+          "Diagrama de sectors"
+        ) {
+
+          boto.onclick =
+            generarDiagramaSectors;
+        }
+
+
+        botons.appendChild(boto);
       }
-
-
-      if (grafic === "Diagrama de sectors") {
-        boto.onclick = generarDiagramaSectors;
-      }
-
-
-      botons.appendChild(boto);
-    });
+    );
   }
 
 
@@ -1158,18 +1610,60 @@ function generarDiagramaBarres() {
   const bars =
     document.getElementById("bars");
 
+  const avisOrdre =
+    document.getElementById(
+      "avisOrdreBarresNominal"
+    );
+
 
   bars.innerHTML = "";
 
 
+  avisOrdre.classList.add("hidden");
+
+
   chart
-    .querySelectorAll(".grid-line, .y-scale")
-    .forEach(element => element.remove());
+    .querySelectorAll(
+      ".grid-line, .y-scale"
+    )
+    .forEach(
+      element => element.remove()
+    );
+
+
+  /*
+    Per a les variables nominals,
+    ordenem les categories de major
+    a menor freqüència.
+
+    slice() crea una còpia perquè
+    la taula original no canviï d'ordre.
+
+    sort() és estable en JavaScript modern:
+    en cas d'empat es conserva l'ordre
+    d'introducció.
+  */
+
+  let dadesGrafic =
+    [...dadesActuals];
+
+
+  if (tipusActual === "nominal") {
+
+    dadesGrafic.sort(
+      (a, b) =>
+        b.frequencia -
+        a.frequencia
+    );
+
+
+    avisOrdre.classList.remove("hidden");
+  }
 
 
   const maxFreq =
     Math.max(
-      ...dadesActuals.map(
+      ...dadesGrafic.map(
         dada => dada.frequencia
       )
     );
@@ -1187,10 +1681,15 @@ function generarDiagramaBarres() {
   const divisions = 5;
 
 
-  for (let i = 0; i <= divisions; i++) {
+  for (
+    let i = 0;
+    i <= divisions;
+    i++
+  ) {
 
     const valor =
       (escalaMax / divisions) * i;
+
 
     const posicio =
       (valor / escalaMax) * 100;
@@ -1199,8 +1698,10 @@ function generarDiagramaBarres() {
     const linea =
       document.createElement("div");
 
+
     linea.className =
       "grid-line";
+
 
     linea.style.bottom =
       posicio + "%";
@@ -1209,72 +1710,88 @@ function generarDiagramaBarres() {
     const etiqueta =
       document.createElement("div");
 
+
     etiqueta.className =
       "y-scale";
 
+
     etiqueta.style.bottom =
       posicio + "%";
+
 
     etiqueta.textContent =
       formatEscala(valor);
 
 
     chart.appendChild(linea);
+
     chart.appendChild(etiqueta);
   }
 
 
-  dadesActuals.forEach(dada => {
+  dadesGrafic.forEach(
+    dada => {
 
-    const columna =
-      document.createElement("div");
-
-    columna.className =
-      "bar-column";
+      const columna =
+        document.createElement("div");
 
 
-    const barra =
-      document.createElement("div");
-
-    barra.className =
-      "bar";
+      columna.className =
+        "bar-column";
 
 
-    const altura =
-      (dada.frequencia / escalaMax) * 100;
+      const barra =
+        document.createElement("div");
 
 
-    barra.style.height =
-      altura + "%";
+      barra.className =
+        "bar";
 
 
-    const freq =
-      document.createElement("div");
-
-    freq.className =
-      "bar-frequency";
-
-    freq.textContent =
-      dada.frequencia;
+      const altura =
+        (
+          dada.frequencia /
+          escalaMax
+        ) * 100;
 
 
-    const valor =
-      document.createElement("div");
-
-    valor.className =
-      "bar-value";
-
-    valor.textContent =
-      dada.valor;
+      barra.style.height =
+        altura + "%";
 
 
-    barra.appendChild(freq);
+      const freq =
+        document.createElement("div");
 
-    columna.appendChild(barra);
-    columna.appendChild(valor);
 
-    bars.appendChild(columna);
-  });
+      freq.className =
+        "bar-frequency";
+
+
+      freq.textContent =
+        dada.frequencia;
+
+
+      const valor =
+        document.createElement("div");
+
+
+      valor.className =
+        "bar-value";
+
+
+      valor.textContent =
+        dada.valor;
+
+
+      barra.appendChild(freq);
+
+      columna.appendChild(barra);
+
+      columna.appendChild(valor);
+
+      bars.appendChild(columna);
+    }
+  );
 
 
   zona.classList.remove("hidden");
@@ -1301,11 +1818,14 @@ function generarDiagramaSectors() {
   const zona =
     document.getElementById("zonaSectors");
 
+
   const canvas =
     document.getElementById("pieCanvas");
 
+
   const ctx =
     canvas.getContext("2d");
+
 
   const legend =
     document.getElementById("pieLegend");
@@ -1339,8 +1859,10 @@ function generarDiagramaSectors() {
   const centreX =
     canvas.width / 2;
 
+
   const centreY =
     canvas.height / 2;
+
 
   const radi =
     Math.min(
@@ -1357,25 +1879,37 @@ function generarDiagramaSectors() {
     (dada, index) => {
 
       const proporcio =
-        dada.frequencia / totalActual;
+        dada.frequencia /
+        totalActual;
+
 
       const angle =
-        proporcio * Math.PI * 2;
+        proporcio *
+        Math.PI *
+        2;
+
 
       const angleFinal =
-        angleInicial + angle;
+        angleInicial +
+        angle;
 
 
       const color =
-        colors[index % colors.length];
+        colors[
+          index % colors.length
+        ];
 
+
+      /* SECTOR */
 
       ctx.beginPath();
+
 
       ctx.moveTo(
         centreX,
         centreY
       );
+
 
       ctx.arc(
         centreX,
@@ -1385,18 +1919,29 @@ function generarDiagramaSectors() {
         angleFinal
       );
 
+
       ctx.closePath();
 
-      ctx.fillStyle = color;
+
+      ctx.fillStyle =
+        color;
+
 
       ctx.fill();
 
-      ctx.strokeStyle = "#ffffff";
 
-      ctx.lineWidth = 3;
+      ctx.strokeStyle =
+        "#ffffff";
+
+
+      ctx.lineWidth =
+        3;
+
 
       ctx.stroke();
 
+
+      /* PERCENTATGE */
 
       const percentatge =
         proporcio * 100;
@@ -1405,7 +1950,9 @@ function generarDiagramaSectors() {
       if (percentatge >= 5) {
 
         const angleMig =
-          angleInicial + angle / 2;
+          angleInicial +
+          angle / 2;
+
 
         const distancia =
           radi * 0.62;
@@ -1413,26 +1960,36 @@ function generarDiagramaSectors() {
 
         const textX =
           centreX +
-          Math.cos(angleMig) * distancia;
+          Math.cos(angleMig) *
+          distancia;
+
 
         const textY =
           centreY +
-          Math.sin(angleMig) * distancia;
+          Math.sin(angleMig) *
+          distancia;
 
 
-        ctx.fillStyle = "#ffffff";
+        ctx.fillStyle =
+          "#ffffff";
+
 
         ctx.font =
           "bold 17px Arial";
 
+
         ctx.textAlign =
           "center";
+
 
         ctx.textBaseline =
           "middle";
 
+
         ctx.fillText(
-          formatPercentatge(percentatge) + "%",
+          formatPercentatge(
+            percentatge
+          ) + "%",
           textX,
           textY
         );
@@ -1444,6 +2001,7 @@ function generarDiagramaSectors() {
       const item =
         document.createElement("div");
 
+
       item.className =
         "legend-item";
 
@@ -1451,8 +2009,10 @@ function generarDiagramaSectors() {
       const quadrat =
         document.createElement("div");
 
+
       quadrat.className =
         "legend-color";
+
 
       quadrat.style.background =
         color;
@@ -1461,17 +2021,26 @@ function generarDiagramaSectors() {
       const text =
         document.createElement("div");
 
+
       text.className =
         "legend-text";
 
+
       text.innerHTML = `
-        <strong>${dada.valor}</strong>
+
+        <strong>
+          ${dada.valor}
+        </strong>
+
         ${dada.frequencia}
+
         (${formatPercentatge(percentatge)} %)
+
       `;
 
 
       item.appendChild(quadrat);
+
       item.appendChild(text);
 
       legend.appendChild(item);
@@ -1507,6 +2076,7 @@ function formatDecimal(numero) {
 }
 
 
+
 function formatPercentatge(numero) {
 
   return numero
@@ -1517,11 +2087,13 @@ function formatPercentatge(numero) {
 }
 
 
+
 function formatEscala(numero) {
 
   if (Number.isInteger(numero)) {
     return numero;
   }
+
 
   return numero
     .toFixed(1)
@@ -1529,13 +2101,16 @@ function formatEscala(numero) {
 }
 
 
+
 function mostrarError(missatge) {
 
   const error =
     document.getElementById("error");
 
+
   error.textContent =
     missatge;
+
 
   error.classList.remove("hidden");
 }
