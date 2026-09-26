@@ -207,6 +207,11 @@
       border-left: 5px solid #f59e0b;
     }
 
+    .pedagogic.discreta {
+      background: #f5f3ff;
+      border-left: 5px solid #7c3aed;
+    }
+
     /* MODA */
 
     .moda-box {
@@ -224,6 +229,33 @@
     }
 
     .moda-resultat {
+      font-size: 1.08rem;
+    }
+
+    /* MESURES DE CENTRALITZACIÓ */
+
+    .mesures-box {
+      margin-top: 20px;
+      padding: 18px 20px;
+      background: #f0fdf4;
+      border-left: 5px solid #16a34a;
+      border-radius: 9px;
+      line-height: 1.7;
+    }
+
+    .mesures-title {
+      font-weight: bold;
+      font-size: 1.08rem;
+      margin-bottom: 7px;
+    }
+
+    .mesures-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 35px;
+    }
+
+    .mesura {
       font-size: 1.08rem;
     }
 
@@ -422,6 +454,11 @@
         width: 290px;
         height: 290px;
       }
+
+      .mesures-grid {
+        flex-direction: column;
+        gap: 5px;
+      }
     }
   </style>
 </head>
@@ -492,6 +529,22 @@
       introdueix les categories
       <strong>en el seu ordre natural</strong>,
       de menor a major.
+
+    </div>
+
+    <!-- AVÍS DISCRETA -->
+
+    <div
+      id="avisDiscretaEntrada"
+      class="pedagogic discreta hidden">
+
+      <div class="pedagogic-title">
+        💡 En una variable quantitativa discreta els valors són numèrics
+      </div>
+
+      Introdueix els diferents valors que pot prendre la variable.
+      La taula els ordenarà automàticament
+      <strong>de menor a major</strong>.
 
     </div>
 
@@ -587,6 +640,35 @@
 
     </div>
 
+    <!-- MESURES DE CENTRALITZACIÓ -->
+
+    <div id="mesuresCentralitzacio" class="mesures-box hidden">
+
+      <div class="mesures-title">
+        Mesures de centralització
+      </div>
+
+      <div class="mesures-grid">
+
+        <div class="mesura">
+          <strong>Mitjana:</strong>
+          <span id="resultatMitjana"></span>
+        </div>
+
+        <div class="mesura">
+          <strong>Mediana:</strong>
+          <span id="resultatMediana"></span>
+        </div>
+
+        <div class="mesura">
+          <strong>Moda:</strong>
+          <span id="resultatModaDiscreta"></span>
+        </div>
+
+      </div>
+
+    </div>
+
     <!-- EXPLICACIÓ NOMINAL -->
 
     <div
@@ -622,6 +704,25 @@
 
       Per això les freqüències acumulades
       <strong>sí que tenen significat</strong>.
+
+    </div>
+
+    <!-- EXPLICACIÓ DISCRETA -->
+
+    <div
+      id="missatgeDiscreta"
+      class="pedagogic discreta hidden">
+
+      <div class="pedagogic-title">
+        💡 Per què apareix la columna xᵢ · nᵢ?
+      </div>
+
+      Com que els valors d'una variable quantitativa són nombres,
+      podem fer operacions amb ells.
+
+      El producte <strong>xᵢ · nᵢ</strong> indica la contribució
+      de cada valor a la suma total de les dades i ens permet
+      calcular la <strong>mitjana aritmètica</strong>.
 
     </div>
 
@@ -739,10 +840,18 @@ function actualitzarAjudaEntrada() {
   const avisOrdinal =
     document.getElementById("avisOrdinalEntrada");
 
+  const avisDiscreta =
+    document.getElementById("avisDiscretaEntrada");
+
   avisOrdinal.classList.add("hidden");
+  avisDiscreta.classList.add("hidden");
 
   if (tipus === "ordinal") {
     avisOrdinal.classList.remove("hidden");
+  }
+
+  if (tipus === "discreta") {
+    avisDiscreta.classList.remove("hidden");
   }
 }
 
@@ -832,14 +941,14 @@ function generarTaula() {
 
   for (const fila of files) {
 
-    const valor =
+    const valorText =
       fila.querySelector(".valor").value.trim();
 
     const frequenciaText =
       fila.querySelector(".frequencia").value;
 
     if (
-      valor === "" &&
+      valorText === "" &&
       frequenciaText === ""
     ) {
       continue;
@@ -848,7 +957,7 @@ function generarTaula() {
     const frequencia =
       Number(frequenciaText);
 
-    if (valor === "") {
+    if (valorText === "") {
 
       mostrarError(
         "Hi ha una fila sense valor de la variable."
@@ -864,16 +973,46 @@ function generarTaula() {
     ) {
 
       mostrarError(
-        "Les freqüències absolutes han de ser nombres enters positius."
+        "Les freqüències absolutes han de ser nombres enters no negatius."
       );
 
       return;
     }
 
-    dades.push({
-      valor: valor,
-      frequencia: frequencia
-    });
+    /*
+      En les variables quantitatives
+      els valors han de ser numèrics.
+    */
+
+    if (
+      tipus === "discreta" ||
+      tipus === "continua"
+    ) {
+
+      const valorNumeric =
+        Number(valorText.replace(",", "."));
+
+      if (!Number.isFinite(valorNumeric)) {
+
+        mostrarError(
+          "En una variable quantitativa, els valors de la variable han de ser nombres."
+        );
+
+        return;
+      }
+
+      dades.push({
+        valor: valorNumeric,
+        frequencia: frequencia
+      });
+
+    } else {
+
+      dades.push({
+        valor: valorText,
+        frequencia: frequencia
+      });
+    }
   }
 
   if (dades.length === 0) {
@@ -883,6 +1022,21 @@ function generarTaula() {
     );
 
     return;
+  }
+
+  /*
+    En la quantitativa discreta
+    ordenem els valors de menor a major.
+
+    Això és necessari perquè les freqüències
+    acumulades i la mediana tinguin sentit.
+  */
+
+  if (tipus === "discreta") {
+
+    dades.sort(
+      (a, b) => a.valor - b.valor
+    );
   }
 
   const N =
@@ -946,15 +1100,53 @@ function construirTaula(
   tbody.innerHTML = "";
   tfoot.innerHTML = "";
 
-  /*
-    Les variables nominals
-    NO tenen freqüències acumulades.
-  */
-
   const teAcumulades =
     tipus !== "nominal";
 
-  if (teAcumulades) {
+  const esDiscreta =
+    tipus === "discreta";
+
+  /* CAPÇALERA */
+
+  if (esDiscreta) {
+
+    thead.innerHTML = `
+
+      <tr>
+
+        <th>
+          Valor<br>xᵢ
+        </th>
+
+        <th>
+          Freq. absoluta<br>nᵢ
+        </th>
+
+        <th>
+          Freq. relativa<br>fᵢ
+        </th>
+
+        <th>
+          Percentatge<br>%
+        </th>
+
+        <th>
+          Freq. abs. acumulada<br>Nᵢ
+        </th>
+
+        <th>
+          Freq. rel. acumulada<br>Fᵢ
+        </th>
+
+        <th>
+          xᵢ · nᵢ
+        </th>
+
+      </tr>
+
+    `;
+
+  } else if (teAcumulades) {
 
     thead.innerHTML = `
 
@@ -1017,6 +1209,7 @@ function construirTaula(
 
   let absolutaAcumulada = 0;
   let relativaAcumulada = 0;
+  let sumaProductes = 0;
 
   dades.forEach(
     (dada, index) => {
@@ -1039,7 +1232,58 @@ function construirTaula(
       const fila =
         document.createElement("tr");
 
-      if (teAcumulades) {
+      if (esDiscreta) {
+
+        const producte =
+          dada.valor * dada.frequencia;
+
+        sumaProductes += producte;
+
+        fila.innerHTML = `
+
+          <td>
+            ${formatNumero(dada.valor)}
+          </td>
+
+          <td>
+            ${dada.frequencia}
+          </td>
+
+          <td>
+            ${formatDecimal(relativa)}
+          </td>
+
+          <td>
+            ${formatPercentatge(percentatge)} %
+          </td>
+
+          <td class="${ultima ? "final-acumulada" : ""}">
+
+            ${
+              ultima
+                ? absolutaAcumulada + " = N"
+                : absolutaAcumulada
+            }
+
+          </td>
+
+          <td class="${ultima ? "final-acumulada" : ""}">
+
+            ${
+              ultima
+                ? "1"
+                : formatDecimal(relativaAcumulada)
+            }
+
+          </td>
+
+          <td>
+            ${formatNumero(producte)}
+          </td>
+
+        `;
+
+      } else if (teAcumulades) {
 
         fila.innerHTML = `
 
@@ -1116,7 +1360,31 @@ function construirTaula(
   filaTotal.className =
     "total-row";
 
-  if (teAcumulades) {
+  if (esDiscreta) {
+
+    filaTotal.innerHTML = `
+
+      <td>TOTAL</td>
+
+      <td>
+        ${N} = N
+      </td>
+
+      <td>1</td>
+
+      <td>100 %</td>
+
+      <td>—</td>
+
+      <td>—</td>
+
+      <td>
+        ${formatNumero(sumaProductes)}
+      </td>
+
+    `;
+
+  } else if (teAcumulades) {
 
     filaTotal.innerHTML = `
 
@@ -1158,7 +1426,7 @@ function construirTaula(
   document.getElementById("total").innerHTML =
     `Nombre total d'individus: N = ${N}`;
 
-  /* MISSATGES */
+  /* MISSATGES I MESURES */
 
   const missatgeNominal =
     document.getElementById("missatgeNominal");
@@ -1166,12 +1434,20 @@ function construirTaula(
   const missatgeOrdinal =
     document.getElementById("missatgeOrdinal");
 
+  const missatgeDiscreta =
+    document.getElementById("missatgeDiscreta");
+
   const moda =
     document.getElementById("moda");
 
+  const mesures =
+    document.getElementById("mesuresCentralitzacio");
+
   missatgeNominal.classList.add("hidden");
   missatgeOrdinal.classList.add("hidden");
+  missatgeDiscreta.classList.add("hidden");
   moda.classList.add("hidden");
+  mesures.classList.add("hidden");
 
   if (tipus === "nominal") {
 
@@ -1187,6 +1463,17 @@ function construirTaula(
     mostrarModa(dades);
   }
 
+  if (tipus === "discreta") {
+
+    missatgeDiscreta.classList.remove("hidden");
+
+    mostrarMesuresCentralitzacio(
+      dades,
+      N,
+      sumaProductes
+    );
+  }
+
   document
     .getElementById("resultats")
     .classList.remove("hidden");
@@ -1194,7 +1481,7 @@ function construirTaula(
 
 
 /* ===============================
-   MODA
+   MODA QUALITATIVES
    =============================== */
 
 function mostrarModa(dades) {
@@ -1249,6 +1536,180 @@ function mostrarModa(dades) {
   }
 
   modaBox.classList.remove("hidden");
+}
+
+
+/* ===============================
+   MESURES DE CENTRALITZACIÓ
+   QUANTITATIVA DISCRETA
+   =============================== */
+
+function mostrarMesuresCentralitzacio(
+  dades,
+  N,
+  sumaProductes
+) {
+
+  const mitjana =
+    sumaProductes / N;
+
+  const mediana =
+    calcularMedianaDiscreta(
+      dades,
+      N
+    );
+
+  const textModa =
+    calcularModaDiscreta(dades);
+
+  document.getElementById(
+    "resultatMitjana"
+  ).textContent =
+    formatNumero(mitjana);
+
+  document.getElementById(
+    "resultatMediana"
+  ).textContent =
+    formatNumero(mediana);
+
+  document.getElementById(
+    "resultatModaDiscreta"
+  ).innerHTML =
+    textModa;
+
+  document.getElementById(
+    "mesuresCentralitzacio"
+  ).classList.remove("hidden");
+}
+
+
+/* ===============================
+   MEDIANA DISCRETA
+   =============================== */
+
+function calcularMedianaDiscreta(
+  dades,
+  N
+) {
+
+  /*
+    Si N és senar:
+    busquem la posició (N + 1) / 2.
+
+    Si N és parell:
+    fem la mitjana dels valors
+    que ocupen les posicions
+    N/2 i N/2 + 1.
+  */
+
+  if (N % 2 === 1) {
+
+    const posicio =
+      (N + 1) / 2;
+
+    return valorEnPosicio(
+      dades,
+      posicio
+    );
+
+  } else {
+
+    const posicio1 =
+      N / 2;
+
+    const posicio2 =
+      posicio1 + 1;
+
+    const valor1 =
+      valorEnPosicio(
+        dades,
+        posicio1
+      );
+
+    const valor2 =
+      valorEnPosicio(
+        dades,
+        posicio2
+      );
+
+    return (
+      valor1 + valor2
+    ) / 2;
+  }
+}
+
+
+function valorEnPosicio(
+  dades,
+  posicio
+) {
+
+  let acumulada = 0;
+
+  for (const dada of dades) {
+
+    acumulada +=
+      dada.frequencia;
+
+    if (
+      acumulada >= posicio
+    ) {
+      return dada.valor;
+    }
+  }
+
+  return null;
+}
+
+
+/* ===============================
+   MODA DISCRETA
+   =============================== */
+
+function calcularModaDiscreta(dades) {
+
+  const frequenciaMaxima =
+    Math.max(
+      ...dades.map(
+        dada => dada.frequencia
+      )
+    );
+
+  const modes =
+    dades.filter(
+      dada =>
+        dada.frequencia ===
+        frequenciaMaxima
+    );
+
+  if (modes.length === dades.length) {
+
+    return `
+      No hi ha una moda única:
+      tots els valors tenen la mateixa freqüència.
+    `;
+  }
+
+  if (modes.length === 1) {
+
+    return `
+      <strong>${formatNumero(modes[0].valor)}</strong>
+      (${frequenciaMaxima} individus)
+    `;
+  }
+
+  const valorsModes =
+    modes
+      .map(
+        dada =>
+          formatNumero(dada.valor)
+      )
+      .join(", ");
+
+  return `
+    <strong>${valorsModes}</strong>
+    (${frequenciaMaxima} individus cadascun)
+  `;
 }
 
 
@@ -1409,16 +1870,20 @@ function generarDiagramaBarres() {
       element => element.remove()
     );
 
+  let dadesGrafic =
+    [...dadesActuals];
+
   /*
     NOMINAL:
     ordenem de major a menor freqüència.
 
     ORDINAL:
     conservem l'ordre natural introduït.
-  */
 
-  let dadesGrafic =
-    [...dadesActuals];
+    DISCRETA:
+    els valors ja estan ordenats
+    numèricament de menor a major.
+  */
 
   if (tipusActual === "nominal") {
 
@@ -1605,14 +2070,6 @@ function generarDiagramaSectors() {
   let angleInicial =
     -Math.PI / 2;
 
-  /*
-    Fem servir dadesActuals directament.
-
-    Això fa que, en una variable ordinal,
-    tant els sectors com la llegenda
-    conservin l'ordre natural introduït.
-  */
-
   dadesActuals.forEach(
     (dada, index) => {
 
@@ -1633,8 +2090,6 @@ function generarDiagramaSectors() {
         colors[
           index % colors.length
         ];
-
-      /* SECTOR */
 
       ctx.beginPath();
 
@@ -1665,8 +2120,6 @@ function generarDiagramaSectors() {
         3;
 
       ctx.stroke();
-
-      /* PERCENTATGE */
 
       const percentatge =
         proporcio * 100;
@@ -1710,8 +2163,6 @@ function generarDiagramaSectors() {
           textY
         );
       }
-
-      /* LLEGENDA */
 
       const item =
         document.createElement("div");
@@ -1798,6 +2249,20 @@ function formatEscala(numero) {
 
   return numero
     .toFixed(1)
+    .replace(".", ",");
+}
+
+
+function formatNumero(numero) {
+
+  if (Number.isInteger(numero)) {
+    return numero.toString();
+  }
+
+  return numero
+    .toFixed(4)
+    .replace(/0+$/, "")
+    .replace(/\.$/, "")
     .replace(".", ",");
 }
 
