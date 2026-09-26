@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadística</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: 40px auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      margin-bottom: 35px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
+    }
+
+    select,
+    input {
+      font-size: 1rem;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      background: white;
+    }
+
+    select {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 18px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      transition: 0.15s;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .secondary {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
+
+    .secondary:hover {
+      background: #d1d5db;
+    }
+
+    .danger {
+      background: #ef4444;
+      padding: 8px 12px;
+    }
+
+    .danger:hover {
+      background: #dc2626;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th {
+      background: #eef2f7;
+      font-weight: 600;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border: 1px solid #d7dde5;
+      text-align: center;
+    }
+
+    td input {
+      width: 100%;
+      text-align: center;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .generate {
+      margin-top: 25px;
+      font-size: 1.05rem;
+      padding: 13px 22px;
+    }
+
+    .total {
+      margin-top: 18px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    .graph-info {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      padding: 18px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+
+    .graph-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .graph-button {
+      background: #0f766e;
+    }
+
+    .graph-button:hover {
+      background: #115e59;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .error {
+      margin-top: 15px;
+      padding: 12px;
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 7px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: 96%;
+        margin-top: 20px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+
+      th,
+      td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Estadística</h1>
+  <div class="subtitle">
+    Crea una taula de freqüències a partir de les teves dades
+  </div>
+
+
+  <!-- PAS 1 -->
+
+  <div class="card">
+
+    <h2>1. Quin tipus de variable estadística tens?</h2>
+
+    <select id="tipusVariable">
+      <option value="">Selecciona una opció...</option>
+      <option value="nominal">Qualitativa nominal</option>
+      <option value="ordinal">Qualitativa ordinal</option>
+      <option value="discreta">Quantitativa discreta</option>
+      <option value="continua">Quantitativa contínua</option>
+    </select>
+
+  </div>
+
+
+  <!-- PAS 2 -->
+
+  <div class="card">
+
+    <h2>2. Introdueix les dades</h2>
+
+    <p>
+      Escriu els valors de la variable i la seva freqüència absoluta.
+    </p>
+
+    <table id="taulaEntrada">
+
+      <thead>
+        <tr>
+          <th>Valor de la variable (xᵢ)</th>
+          <th>Freqüència absoluta (nᵢ)</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody id="filesEntrada">
+
+        <tr>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="buttons">
+
+      <button class="secondary" onclick="afegirFila()">
+        + Afegir valor
+      </button>
+
+    </div>
+
+    <button class="generate" onclick="generarTaula()">
+      Generar taula de freqüències
+    </button>
+
+    <div id="error" class="error hidden"></div>
+
+  </div>
+
+
+  <!-- PAS 3 -->
+
+  <div id="resultats" class="card hidden">
+
+    <h2>3. Taula de freqüències</h2>
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Valor<br>xᵢ</th>
+          <th>Freq. absoluta<br>nᵢ</th>
+          <th>Freq. relativa<br>fᵢ</th>
+          <th>Percentatge<br>%</th>
+          <th>Freq. abs. acumulada<br>Nᵢ</th>
+          <th>Freq. rel. acumulada<br>Fᵢ</th>
+        </tr>
+
+      </thead>
+
+      <tbody id="cosResultats"></tbody>
+
+    </table>
+
+    <div id="total" class="total"></div>
+
+  </div>
+
+
+  <!-- PAS 4 -->
+
+  <div id="grafics" class="card hidden">
+
+    <h2>4. Gràfics disponibles</h2>
+
+    <div id="infoGrafics" class="graph-info"></div>
+
+    <div id="botonsGrafics" class="graph-buttons"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+function afegirFila() {
+
+  const tbody = document.getElementById("filesEntrada");
+
+  const fila = document.createElement("tr");
+
+  fila.innerHTML = `
+    <td>
+      <input type="text" class="valor" placeholder="Valor">
+    </td>
+
+    <td>
+      <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+    </td>
+
+    <td>
+      <button class="danger" onclick="eliminarFila(this)">✕</button>
+    </td>
+  `;
+
+  tbody.appendChild(fila);
+
+}
+
+
+function eliminarFila(boto) {
+
+  const files = document.querySelectorAll("#filesEntrada tr");
+
+  if (files.length > 1) {
+    boto.closest("tr").remove();
+  }
+
+}
+
+
+function generarTaula() {
+
+  const tipus = document.getElementById("tipusVariable").value;
+
+  const error = document.getElementById("error");
+
+  error.classList.add("hidden");
+
+
+  if (!tipus) {
+
+    mostrarError("Primer has de seleccionar el tipus de variable estadística.");
+
+    return;
+
+  }
+
+
+  const files = document.querySelectorAll("#filesEntrada tr");
+
+  let dades = [];
+
+
+  for (const fila of files) {
+
+    const valor = fila.querySelector(".valor").value.trim();
+
+    const frequenciaText = fila.querySelector(".frequencia").value;
+
+
+    if (valor === "" && frequenciaText === "") {
+      continue;
+    }
+
+
+    const frequencia = Number(frequenciaText);
+
+
+    if (valor === "") {
+
+      mostrarError("Hi ha una fila sense valor de la variable.");
+
+      return;
+
+    }
+
+
+    if (
+      frequenciaText === "" ||
+      !Number.isInteger(frequencia) ||
+      frequencia < 0
+    ) {
+
+      mostrarError("Les freqüències absolutes han de ser nombres enters positius.");
+
+      return;
+
+    }
+
+
+    dades.push({
+      valor: valor,
+      frequencia: frequencia
+    });
+
+  }
+
+
+  if (dades.length === 0) {
+
+    mostrarError("Has d'introduir almenys un valor.");
+
+    return;
+
+  }
+
+
+  const N = dades.reduce(
+    (suma, dada) => suma + dada.frequencia,
+    0
+  );
+
+
+  if (N === 0) {
+
+    mostrarError("La freqüència total ha de ser superior a zero.");
+
+    return;
+
+  }
+
+
+  construirTaula(dades, N);
+
+  mostrarGrafics(tipus);
+
+}
+
+
+function construirTaula(dades, N) {
+
+  const tbody = document.getElementById("cosResultats");
+
+  tbody.innerHTML = "";
+
+
+  let absolutaAcumulada = 0;
+  let relativaAcumulada = 0;
+
+
+  dades.forEach(dada => {
+
+    const relativa = dada.frequencia / N;
+
+    const percentatge = relativa * 100;
+
+    absolutaAcumulada += dada.frequencia;
+
+    relativaAcumulada += relativa;
+
+
+    const fila = document.createElement("tr");
+
+
+    fila.innerHTML = `
+
+      <td>${dada.valor}</td>
+
+      <td>${dada.frequencia}</td>
+
+      <td>${formatDecimal(relativa)}</td>
+
+      <td>${formatPercentatge(percentatge)} %</td>
+
+      <td>${absolutaAcumulada}</td>
+
+      <td>${formatDecimal(relativaAcumulada)}</td>
+
+    `;
+
+
+    tbody.appendChild(fila);
+
+  });
+
+
+  document.getElementById("total").innerHTML =
+    `Nombre total d'individus: N = ${N}`;
+
+
+  document
+    .getElementById("resultats")
+    .classList.remove("hidden");
+
+}
+
+
+function mostrarGrafics(tipus) {
+
+  const info = document.getElementById("infoGrafics");
+
+  const botons = document.getElementById("botonsGrafics");
+
+
+  let nomTipus = "";
+
+  let grafics = [];
+
+
+  if (tipus === "nominal") {
+
+    nomTipus = "qualitativa nominal";
+
+    grafics = [
+      "Diagrama de barres",
+      "Diagrama de sectors"
+    ];
+
+  }
+
+
+  if (tipus === "ordinal") {
+
+    nomTipus = "qualitativa ordinal";
+
+    grafics = [
+      "Diagrama de barres",
+      "Diagrama de sectors"
+    ];
+
+  }
+
+
+  if (tipus === "discreta") {
+
+    nomTipus = "quantitativa discreta";
+
+    grafics = [
+      "Diagrama de barres",
+      "Polígon de freqüències"
+    ];
+
+  }
+
+
+  if (tipus === "continua") {
+
+    nomTipus = "quantitativa contínua";
+
+    grafics = [
+      "Histograma",
+      "Polígon de freqüències"
+    ];
+
+  }
+
+
+  info.innerHTML = `
+    Com que la teva variable és
+    <strong>${nomTipus}</strong>,
+    pots representar les dades amb:
+  `;
+
+
+  botons.innerHTML = "";
+
+
+  grafics.forEach(grafic => {
+
+    const boto = document.createElement("button");
+
+    boto.className = "graph-button";
+
+    boto.textContent = grafic;
+
+    boto.onclick = function() {
+
+      alert(
+        "En la següent versió generarem automàticament: " + grafic
+      );
+
+    };
+
+
+    botons.appendChild(boto);
+
+  });
+
+
+  document
+    .getElementById("grafics")
+    .classList.remove("hidden");
+
+}
+
+
+function formatDecimal(numero) {
+
+  return numero
+    .toFixed(4)
+    .replace(/0+$/, "")
+    .replace(/\.$/, "")
+    .replace(".", ",");
+
+}
+
+
+function formatPercentatge(numero) {
+
+  return numero
+    .toFixed(2)
+    .replace(/0+$/, "")
+    .replace(/\.$/, "")
+    .replace(".", ",");
+
+}
+
+
+function mostrarError(missatge) {
+
+  const error = document.getElementById("error");
+
+  error.textContent = missatge;
+
+  error.classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
