@@ -172,7 +172,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .error {
@@ -184,9 +184,11 @@
     }
 
 
-    /* GRÀFIC */
+    /* =========================
+       DIAGRAMA DE BARRES
+       ========================= */
 
-    #zonaGrafic {
+    .zona-grafic {
       margin-top: 30px;
       padding-top: 25px;
       border-top: 1px solid #e5e7eb;
@@ -244,6 +246,8 @@
       justify-content: space-around;
       padding: 0 25px;
       gap: 20px;
+      position: relative;
+      z-index: 2;
     }
 
     .bar-column {
@@ -284,6 +288,7 @@
       position: absolute;
       bottom: -30px;
       font-weight: bold;
+      white-space: nowrap;
     }
 
     .y-scale {
@@ -304,7 +309,55 @@
       z-index: 0;
     }
 
+
+    /* =========================
+       DIAGRAMA DE SECTORS
+       ========================= */
+
+    .pie-layout {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 60px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    #pieCanvas {
+      width: 360px;
+      height: 360px;
+      max-width: 100%;
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 220px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+    }
+
+    .legend-color {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .legend-text strong {
+      display: inline-block;
+      min-width: 70px;
+    }
+
+
     @media (max-width: 700px) {
+
       .container {
         width: 96%;
         margin-top: 20px;
@@ -322,9 +375,19 @@
       td {
         padding: 8px;
       }
+
+      .pie-layout {
+        gap: 25px;
+      }
+
+      #pieCanvas {
+        width: 290px;
+        height: 290px;
+      }
     }
   </style>
 </head>
+
 
 <body>
 
@@ -364,7 +427,7 @@
       Escriu els valors de la variable i la seva freqüència absoluta.
     </p>
 
-    <table id="taulaEntrada">
+    <table>
 
       <thead>
         <tr>
@@ -377,21 +440,45 @@
       <tbody id="filesEntrada">
 
         <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
         </tr>
 
         <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
         </tr>
 
         <tr>
-          <td><input type="text" class="valor" placeholder="Valor"></td>
-          <td><input type="number" class="frequencia" min="0" step="1" placeholder="0"></td>
-          <td><button class="danger" onclick="eliminarFila(this)">✕</button></td>
+          <td>
+            <input type="text" class="valor" placeholder="Valor">
+          </td>
+
+          <td>
+            <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+          </td>
+
+          <td>
+            <button class="danger" onclick="eliminarFila(this)">✕</button>
+          </td>
         </tr>
 
       </tbody>
@@ -399,9 +486,11 @@
     </table>
 
     <div class="buttons">
+
       <button class="secondary" onclick="afegirFila()">
         + Afegir valor
       </button>
+
     </div>
 
     <button class="generate" onclick="generarTaula()">
@@ -421,16 +510,7 @@
 
     <table>
 
-      <thead>
-        <tr>
-          <th>Valor<br>xᵢ</th>
-          <th>Freq. absoluta<br>nᵢ</th>
-          <th>Freq. relativa<br>fᵢ</th>
-          <th>Percentatge<br>%</th>
-          <th>Freq. abs. acumulada<br>Nᵢ</th>
-          <th>Freq. rel. acumulada<br>Fᵢ</th>
-        </tr>
-      </thead>
+      <thead id="capResultats"></thead>
 
       <tbody id="cosResultats"></tbody>
 
@@ -454,9 +534,9 @@
     <div id="botonsGrafics" class="graph-buttons"></div>
 
 
-    <!-- ZONA DEL GRÀFIC -->
+    <!-- DIAGRAMA DE BARRES -->
 
-    <div id="zonaGrafic" class="hidden">
+    <div id="zonaBarres" class="zona-grafic hidden">
 
       <h3 class="grafic-titol">
         Diagrama de barres
@@ -486,6 +566,36 @@
 
     </div>
 
+
+    <!-- DIAGRAMA DE SECTORS -->
+
+    <div id="zonaSectors" class="zona-grafic hidden">
+
+      <h3 class="grafic-titol">
+        Diagrama de sectors
+      </h3>
+
+      <div class="grafic-subtitol">
+        Distribució percentual
+      </div>
+
+      <div class="pie-layout">
+
+        <canvas
+          id="pieCanvas"
+          width="420"
+          height="420">
+        </canvas>
+
+        <div
+          id="pieLegend"
+          class="legend">
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </div>
@@ -495,35 +605,54 @@
 
 let dadesActuals = [];
 let totalActual = 0;
+let tipusActual = "";
 
 
 function afegirFila() {
 
-  const tbody = document.getElementById("filesEntrada");
+  const tbody =
+    document.getElementById("filesEntrada");
 
-  const fila = document.createElement("tr");
+  const fila =
+    document.createElement("tr");
 
   fila.innerHTML = `
+
     <td>
-      <input type="text" class="valor" placeholder="Valor">
+      <input
+        type="text"
+        class="valor"
+        placeholder="Valor">
     </td>
 
     <td>
-      <input type="number" class="frequencia" min="0" step="1" placeholder="0">
+      <input
+        type="number"
+        class="frequencia"
+        min="0"
+        step="1"
+        placeholder="0">
     </td>
 
     <td>
-      <button class="danger" onclick="eliminarFila(this)">✕</button>
+      <button
+        class="danger"
+        onclick="eliminarFila(this)">
+        ✕
+      </button>
     </td>
+
   `;
 
   tbody.appendChild(fila);
 }
 
 
+
 function eliminarFila(boto) {
 
-  const files = document.querySelectorAll("#filesEntrada tr");
+  const files =
+    document.querySelectorAll("#filesEntrada tr");
 
   if (files.length > 1) {
     boto.closest("tr").remove();
@@ -531,11 +660,14 @@ function eliminarFila(boto) {
 }
 
 
+
 function generarTaula() {
 
-  const tipus = document.getElementById("tipusVariable").value;
+  const tipus =
+    document.getElementById("tipusVariable").value;
 
-  const error = document.getElementById("error");
+  const error =
+    document.getElementById("error");
 
   error.classList.add("hidden");
 
@@ -565,12 +697,16 @@ function generarTaula() {
       fila.querySelector(".frequencia").value;
 
 
-    if (valor === "" && frequenciaText === "") {
+    if (
+      valor === "" &&
+      frequenciaText === ""
+    ) {
       continue;
     }
 
 
-    const frequencia = Number(frequenciaText);
+    const frequencia =
+      Number(frequenciaText);
 
 
     if (valor === "") {
@@ -614,10 +750,12 @@ function generarTaula() {
   }
 
 
-  const N = dades.reduce(
-    (suma, dada) => suma + dada.frequencia,
-    0
-  );
+  const N =
+    dades.reduce(
+      (suma, dada) =>
+        suma + dada.frequencia,
+      0
+    );
 
 
   if (N === 0) {
@@ -632,22 +770,29 @@ function generarTaula() {
 
   dadesActuals = dades;
   totalActual = N;
+  tipusActual = tipus;
 
 
-  construirTaula(dades, N);
+  construirTaula(dades, N, tipus);
 
   mostrarGrafics(tipus);
 
 
-  // Ocultem un gràfic anterior si es generen dades noves
+  document
+    .getElementById("zonaBarres")
+    .classList.add("hidden");
 
   document
-    .getElementById("zonaGrafic")
+    .getElementById("zonaSectors")
     .classList.add("hidden");
 }
 
 
-function construirTaula(dades, N) {
+
+function construirTaula(dades, N, tipus) {
+
+  const thead =
+    document.getElementById("capResultats");
 
   const tbody =
     document.getElementById("cosResultats");
@@ -655,8 +800,83 @@ function construirTaula(dades, N) {
   const tfoot =
     document.getElementById("peuResultats");
 
+
+  thead.innerHTML = "";
   tbody.innerHTML = "";
   tfoot.innerHTML = "";
+
+
+  /*
+    NOMINAL:
+    no té freqüències acumulades
+    perquè les categories no tenen
+    un ordre natural.
+  */
+
+  const teAcumulades =
+    tipus !== "nominal";
+
+
+  if (teAcumulades) {
+
+    thead.innerHTML = `
+
+      <tr>
+
+        <th>
+          Valor<br>xᵢ
+        </th>
+
+        <th>
+          Freq. absoluta<br>nᵢ
+        </th>
+
+        <th>
+          Freq. relativa<br>fᵢ
+        </th>
+
+        <th>
+          Percentatge<br>%
+        </th>
+
+        <th>
+          Freq. abs. acumulada<br>Nᵢ
+        </th>
+
+        <th>
+          Freq. rel. acumulada<br>Fᵢ
+        </th>
+
+      </tr>
+
+    `;
+
+  } else {
+
+    thead.innerHTML = `
+
+      <tr>
+
+        <th>
+          Valor<br>xᵢ
+        </th>
+
+        <th>
+          Freq. absoluta<br>nᵢ
+        </th>
+
+        <th>
+          Freq. relativa<br>fᵢ
+        </th>
+
+        <th>
+          Percentatge<br>%
+        </th>
+
+      </tr>
+
+    `;
+  }
 
 
   let absolutaAcumulada = 0;
@@ -670,6 +890,7 @@ function construirTaula(dades, N) {
 
     const percentatge =
       relativa * 100;
+
 
     absolutaAcumulada +=
       dada.frequencia;
@@ -686,45 +907,71 @@ function construirTaula(dades, N) {
       document.createElement("tr");
 
 
-    fila.innerHTML = `
+    if (teAcumulades) {
 
-      <td>
-        ${dada.valor}
-      </td>
+      fila.innerHTML = `
 
-      <td>
-        ${dada.frequencia}
-      </td>
+        <td>
+          ${dada.valor}
+        </td>
 
-      <td>
-        ${formatDecimal(relativa)}
-      </td>
+        <td>
+          ${dada.frequencia}
+        </td>
 
-      <td>
-        ${formatPercentatge(percentatge)} %
-      </td>
+        <td>
+          ${formatDecimal(relativa)}
+        </td>
 
-      <td class="${ultima ? "final-acumulada" : ""}">
-        ${
-          ultima
-          ? absolutaAcumulada + " = N"
-          : absolutaAcumulada
-        }
-      </td>
+        <td>
+          ${formatPercentatge(percentatge)} %
+        </td>
 
-      <td class="${ultima ? "final-acumulada" : ""}">
-        ${
-          ultima
-          ? "1"
-          : formatDecimal(relativaAcumulada)
-        }
-      </td>
+        <td class="${ultima ? "final-acumulada" : ""}">
+          ${
+            ultima
+            ? absolutaAcumulada + " = N"
+            : absolutaAcumulada
+          }
+        </td>
 
-    `;
+        <td class="${ultima ? "final-acumulada" : ""}">
+          ${
+            ultima
+            ? "1"
+            : formatDecimal(relativaAcumulada)
+          }
+        </td>
+
+      `;
+
+    } else {
+
+      fila.innerHTML = `
+
+        <td>
+          ${dada.valor}
+        </td>
+
+        <td>
+          ${dada.frequencia}
+        </td>
+
+        <td>
+          ${formatDecimal(relativa)}
+        </td>
+
+        <td>
+          ${formatPercentatge(percentatge)} %
+        </td>
+
+      `;
+    }
 
 
     tbody.appendChild(fila);
   });
+
 
 
   /* FILA TOTAL */
@@ -732,36 +979,62 @@ function construirTaula(dades, N) {
   const filaTotal =
     document.createElement("tr");
 
-  filaTotal.className = "total-row";
+  filaTotal.className =
+    "total-row";
 
 
-  filaTotal.innerHTML = `
+  if (teAcumulades) {
 
-    <td>
-      TOTAL
-    </td>
+    filaTotal.innerHTML = `
 
-    <td>
-      ${N} = N
-    </td>
+      <td>
+        TOTAL
+      </td>
 
-    <td>
-      1
-    </td>
+      <td>
+        ${N} = N
+      </td>
 
-    <td>
-      100 %
-    </td>
+      <td>
+        1
+      </td>
 
-    <td>
-      —
-    </td>
+      <td>
+        100 %
+      </td>
 
-    <td>
-      —
-    </td>
+      <td>
+        —
+      </td>
 
-  `;
+      <td>
+        —
+      </td>
+
+    `;
+
+  } else {
+
+    filaTotal.innerHTML = `
+
+      <td>
+        TOTAL
+      </td>
+
+      <td>
+        ${N} = N
+      </td>
+
+      <td>
+        1
+      </td>
+
+      <td>
+        100 %
+      </td>
+
+    `;
+  }
 
 
   tfoot.appendChild(filaTotal);
@@ -775,6 +1048,7 @@ function construirTaula(dades, N) {
     .getElementById("resultats")
     .classList.remove("hidden");
 }
+
 
 
 function mostrarGrafics(tipus) {
@@ -796,7 +1070,8 @@ function mostrarGrafics(tipus) {
       "qualitativa nominal";
 
     grafics = [
-      "Diagrama de barres"
+      "Diagrama de barres",
+      "Diagrama de sectors"
     ];
   }
 
@@ -833,9 +1108,11 @@ function mostrarGrafics(tipus) {
 
 
   info.innerHTML = `
+
     Com que la teva variable és
     <strong>${nomTipus}</strong>,
     aquests són els gràfics disponibles:
+
   `;
 
 
@@ -844,8 +1121,12 @@ function mostrarGrafics(tipus) {
 
   if (grafics.length === 0) {
 
-    botons.innerHTML =
-      "<span>Properament afegirem gràfics per a aquest tipus de variable.</span>";
+    botons.innerHTML = `
+      <span>
+        Properament afegirem gràfics
+        per a aquest tipus de variable.
+      </span>
+    `;
 
   } else {
 
@@ -868,6 +1149,13 @@ function mostrarGrafics(tipus) {
       }
 
 
+      if (grafic === "Diagrama de sectors") {
+
+        boto.onclick =
+          generarDiagramaSectors;
+      }
+
+
       botons.appendChild(boto);
     });
   }
@@ -879,10 +1167,20 @@ function mostrarGrafics(tipus) {
 }
 
 
+
+/* ================================
+   DIAGRAMA DE BARRES
+   ================================ */
+
 function generarDiagramaBarres() {
 
+  document
+    .getElementById("zonaSectors")
+    .classList.add("hidden");
+
+
   const zona =
-    document.getElementById("zonaGrafic");
+    document.getElementById("zonaBarres");
 
   const chart =
     document.getElementById("chart");
@@ -894,11 +1192,13 @@ function generarDiagramaBarres() {
   bars.innerHTML = "";
 
 
-  // Eliminem escala anterior
-
   chart
-    .querySelectorAll(".grid-line, .y-scale")
-    .forEach(element => element.remove());
+    .querySelectorAll(
+      ".grid-line, .y-scale"
+    )
+    .forEach(
+      element => element.remove()
+    );
 
 
   const maxFreq =
@@ -909,25 +1209,23 @@ function generarDiagramaBarres() {
     );
 
 
-  /*
-     Creem una escala una mica superior
-     a la freqüència màxima.
-  */
-
   let escalaMax =
     Math.ceil(maxFreq * 1.15);
+
 
   if (escalaMax < 5) {
     escalaMax = 5;
   }
 
 
-  // 5 línies horitzontals
-
   const divisions = 5;
 
 
-  for (let i = 0; i <= divisions; i++) {
+  for (
+    let i = 0;
+    i <= divisions;
+    i++
+  ) {
 
     const valor =
       (escalaMax / divisions) * i;
@@ -964,8 +1262,6 @@ function generarDiagramaBarres() {
   }
 
 
-  // BARRAS
-
   dadesActuals.forEach(dada => {
 
     const columna =
@@ -983,7 +1279,10 @@ function generarDiagramaBarres() {
 
 
     const altura =
-      (dada.frequencia / escalaMax) * 100;
+      (
+        dada.frequencia /
+        escalaMax
+      ) * 100;
 
 
     barra.style.height =
@@ -1028,6 +1327,247 @@ function generarDiagramaBarres() {
   });
 }
 
+
+
+/* ================================
+   DIAGRAMA DE SECTORS
+   ================================ */
+
+function generarDiagramaSectors() {
+
+  document
+    .getElementById("zonaBarres")
+    .classList.add("hidden");
+
+
+  const zona =
+    document.getElementById("zonaSectors");
+
+  const canvas =
+    document.getElementById("pieCanvas");
+
+  const ctx =
+    canvas.getContext("2d");
+
+  const legend =
+    document.getElementById("pieLegend");
+
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+
+  legend.innerHTML = "";
+
+
+  const colors = [
+    "#2563eb",
+    "#ef4444",
+    "#22c55e",
+    "#eab308",
+    "#a855f7",
+    "#06b6d4",
+    "#f97316",
+    "#ec4899",
+    "#64748b",
+    "#84cc16"
+  ];
+
+
+  const centreX =
+    canvas.width / 2;
+
+  const centreY =
+    canvas.height / 2;
+
+  const radi =
+    Math.min(
+      canvas.width,
+      canvas.height
+    ) * 0.40;
+
+
+  let angleInicial =
+    -Math.PI / 2;
+
+
+  dadesActuals.forEach(
+    (dada, index) => {
+
+      const proporcio =
+        dada.frequencia /
+        totalActual;
+
+      const angle =
+        proporcio *
+        Math.PI *
+        2;
+
+      const angleFinal =
+        angleInicial + angle;
+
+
+      const color =
+        colors[
+          index % colors.length
+        ];
+
+
+      /* SECTOR */
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        centreX,
+        centreY
+      );
+
+      ctx.arc(
+        centreX,
+        centreY,
+        radi,
+        angleInicial,
+        angleFinal
+      );
+
+      ctx.closePath();
+
+      ctx.fillStyle =
+        color;
+
+      ctx.fill();
+
+
+      ctx.strokeStyle =
+        "#ffffff";
+
+      ctx.lineWidth =
+        3;
+
+      ctx.stroke();
+
+
+      /* PERCENTATGE DINS DEL SECTOR */
+
+      const percentatge =
+        proporcio * 100;
+
+
+      /*
+        Només escrivim dins del sector
+        si és prou gran per llegir-se.
+      */
+
+      if (percentatge >= 5) {
+
+        const angleMig =
+          angleInicial +
+          angle / 2;
+
+        const distancia =
+          radi * 0.62;
+
+
+        const textX =
+          centreX +
+          Math.cos(angleMig) *
+          distancia;
+
+        const textY =
+          centreY +
+          Math.sin(angleMig) *
+          distancia;
+
+
+        ctx.fillStyle =
+          "#ffffff";
+
+        ctx.font =
+          "bold 17px Arial";
+
+        ctx.textAlign =
+          "center";
+
+        ctx.textBaseline =
+          "middle";
+
+        ctx.fillText(
+          formatPercentatge(
+            percentatge
+          ) + "%",
+          textX,
+          textY
+        );
+      }
+
+
+      /* LLEGENDA */
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "legend-item";
+
+
+      const quadrat =
+        document.createElement("div");
+
+      quadrat.className =
+        "legend-color";
+
+      quadrat.style.background =
+        color;
+
+
+      const text =
+        document.createElement("div");
+
+      text.className =
+        "legend-text";
+
+      text.innerHTML = `
+
+        <strong>
+          ${dada.valor}
+        </strong>
+
+        ${dada.frequencia}
+        (${formatPercentatge(percentatge)} %)
+
+      `;
+
+
+      item.appendChild(quadrat);
+      item.appendChild(text);
+
+      legend.appendChild(item);
+
+
+      angleInicial =
+        angleFinal;
+    }
+  );
+
+
+  zona.classList.remove("hidden");
+
+
+  zona.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+
+
+/* ================================
+   FORMATS
+   ================================ */
 
 function formatDecimal(numero) {
 
