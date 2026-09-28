@@ -216,6 +216,14 @@ td input{
   margin-top:7px;
 }
 
+/* TAULA DE RESULTATS AMPLA */
+
+#resultats > table{
+  display:block;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+
 /* MISSATGES PEDAGÒGICS */
 
 .pedagogic{
@@ -757,6 +765,24 @@ Mesures de centralització
 
 </div>
 
+<!-- DISPERSIÓ DISCRETA -->
+
+<div id="mesuresDispersioDiscreta" class="mesures-box hidden">
+
+<div class="mesures-title">
+Mesures de dispersió
+</div>
+
+<div class="mesures-grid">
+<div class="mesura"><strong>Rang:</strong> <span id="resultatRangDiscreta"></span></div>
+<div class="mesura"><strong>Desviació mitjana:</strong> <span id="resultatDMDiscreta"></span></div>
+<div class="mesura"><strong>Variància:</strong> <span id="resultatVarianciaDiscreta"></span></div>
+<div class="mesura"><strong>Desviació típica:</strong> <span id="resultatDTDiscreta"></span></div>
+<div class="mesura"><strong>Coeficient de variació:</strong> <span id="resultatCVDiscreta"></span></div>
+</div>
+
+</div>
+
 <!-- MESURES CONTÍNUA -->
 
 <div id="mesuresContinua" class="mesures-box hidden">
@@ -789,6 +815,30 @@ Mesures de centralització
 
 </div>
 
+</div>
+
+<!-- DISPERSIÓ CONTÍNUA -->
+
+<div id="mesuresDispersioContinuaReal" class="mesures-box hidden">
+<div class="mesures-title">Mesures de dispersió — dades originals</div>
+<div class="mesures-grid">
+<div class="mesura"><strong>Rang real:</strong> <span id="resultatRangRealContinua"></span></div>
+<div class="mesura"><strong>Desviació mitjana real:</strong> <span id="resultatDMRealContinua"></span></div>
+<div class="mesura"><strong>Variància real:</strong> <span id="resultatVarianciaRealContinua"></span></div>
+<div class="mesura"><strong>Desviació típica real:</strong> <span id="resultatDTRealContinua"></span></div>
+<div class="mesura"><strong>Coeficient de variació real:</strong> <span id="resultatCVRealContinua"></span></div>
+</div>
+</div>
+
+<div id="mesuresDispersioContinuaEstimada" class="mesures-box hidden">
+<div class="mesures-title">Mesures de dispersió — dades agrupades</div>
+<div class="mesures-grid">
+<div class="mesura"><strong>Rang aproximat:</strong> <span id="resultatRangEstimatContinua"></span></div>
+<div class="mesura"><strong>Desviació mitjana estimada:</strong> <span id="resultatDMEstimadaContinua"></span></div>
+<div class="mesura"><strong>Variància estimada:</strong> <span id="resultatVarianciaEstimadaContinua"></span></div>
+<div class="mesura"><strong>Desviació típica estimada:</strong> <span id="resultatDTEstimadaContinua"></span></div>
+<div class="mesura"><strong>Coeficient de variació estimat:</strong> <span id="resultatCVEstimatContinua"></span></div>
+</div>
 </div>
 
 <!-- EXPLICACIONS -->
@@ -875,6 +925,16 @@ Per això obtenim una
 <strong>mitjana estimada</strong>,
 que pot ser lleugerament diferent de la mitjana real.
 
+</div>
+
+<div id="missatgeDispersio" class="pedagogic discreta hidden">
+<div class="pedagogic-title">💡 Què mesuren les mesures de dispersió?</div>
+Les mesures de dispersió indiquen fins a quin punt les dades estan <strong>concentrades o disperses</strong>. El rang només compara el valor màxim i el mínim; la desviació mitjana, la variància i la desviació típica tenen en compte totes les dades. El <strong>coeficient de variació</strong> compara la desviació típica amb la mitjana i expressa la dispersió relativa en percentatge.
+</div>
+
+<div id="missatgeDispersioContinua" class="pedagogic continua hidden">
+<div class="pedagogic-title">💡 Per què tenim mesures reals i estimades?</div>
+Amb les <strong>dades originals</strong> podem calcular la dispersió real. Quan treballem amb dades agrupades, substituïm els valors de cada interval per la seva <strong>marca de classe</strong>, i obtenim mesures estimades. El rang aproximat es calcula amb els límits extrems dels intervals. El <strong>coeficient de variació</strong> es calcula dividint la desviació típica entre la mitjana i expressant el resultat en percentatge.
 </div>
 
 <div id="missatgeClasseModal" class="pedagogic continua hidden">
@@ -1549,6 +1609,11 @@ function construirTaulaContinua(
       <th>Freq. abs. acumulada<br>Nᵢ</th>
       <th>Freq. rel. acumulada<br>Fᵢ</th>
       <th>xᵢ · nᵢ</th>
+      <th>xᵢ − x̄</th>
+      <th>|xᵢ − x̄|</th>
+      <th>nᵢ · |xᵢ − x̄|</th>
+      <th>(xᵢ − x̄)²</th>
+      <th>nᵢ · (xᵢ − x̄)²</th>
     </tr>
   `;
 
@@ -1557,7 +1622,10 @@ function construirTaulaContinua(
 
   let absolutaAcumulada=0;
   let relativaAcumulada=0;
-  let sumaProductes=0;
+  const sumaProductes=intervals.reduce((s,i)=>s+i.marca*i.frequencia,0);
+  const mitjanaTaula=sumaProductes/N;
+  let sumaAbsPonderada=0;
+  let sumaQuadratsPonderada=0;
 
   intervals.forEach(
     (interval,index)=>{
@@ -1578,7 +1646,14 @@ function construirTaulaContinua(
         interval.marca*
         interval.frequencia;
 
-      sumaProductes+=producte;
+      const diferencia=interval.marca-mitjanaTaula;
+      const diferenciaAbs=Math.abs(diferencia);
+      const absPonderada=interval.frequencia*diferenciaAbs;
+      const diferenciaQuadrat=Math.pow(diferencia,2);
+      const quadratPonderat=interval.frequencia*diferenciaQuadrat;
+
+      sumaAbsPonderada+=absPonderada;
+      sumaQuadratsPonderada+=quadratPonderat;
 
       const ultima=
         index===intervals.length-1;
@@ -1624,9 +1699,12 @@ function construirTaulaContinua(
           }
         </td>
 
-        <td>
-          ${formatNumero(producte)}
-        </td>
+        <td>${formatNumero(producte)}</td>
+        <td>${formatNumero(diferencia)}</td>
+        <td>${formatNumero(diferenciaAbs)}</td>
+        <td>${formatNumero(absPonderada)}</td>
+        <td>${formatNumero(diferenciaQuadrat)}</td>
+        <td>${formatNumero(quadratPonderat)}</td>
       `;
 
       tbody.appendChild(fila);
@@ -1647,6 +1725,11 @@ function construirTaulaContinua(
     <td>—</td>
     <td>—</td>
     <td>${formatNumero(sumaProductes)}</td>
+    <td>—</td>
+    <td>—</td>
+    <td>${formatNumero(sumaAbsPonderada)}</td>
+    <td>—</td>
+    <td>${formatNumero(sumaQuadratsPonderada)}</td>
   `;
 
   tfoot.appendChild(filaTotal);
@@ -1690,6 +1773,12 @@ function construirTaulaContinua(
   const textClasseModal=
     calcularClasseModal(intervals);
 
+  const dispersioReal=
+    calcularDispersioDadesIndividuals(dadesOriginals);
+
+  const dispersioEstimada=
+    calcularDispersioAgrupada(intervals,mitjanaEstimada,N);
+
   document
     .getElementById(
       "resultatMitjanaRealContinua"
@@ -1718,6 +1807,18 @@ function construirTaulaContinua(
     .innerHTML=
       textClasseModal;
 
+  document.getElementById("resultatRangRealContinua").textContent=formatNumero(dispersioReal.rang);
+  document.getElementById("resultatDMRealContinua").textContent=formatNumero(dispersioReal.desviacioMitjana);
+  document.getElementById("resultatVarianciaRealContinua").textContent=formatNumero(dispersioReal.variancia);
+  document.getElementById("resultatDTRealContinua").textContent=formatNumero(dispersioReal.desviacioTipica);
+  document.getElementById("resultatCVRealContinua").textContent=dispersioReal.coeficientVariacio===null ? "No definit (mitjana = 0)" : formatNumero(dispersioReal.coeficientVariacio)+" %";
+
+  document.getElementById("resultatRangEstimatContinua").textContent=formatNumero(dispersioEstimada.rang);
+  document.getElementById("resultatDMEstimadaContinua").textContent=formatNumero(dispersioEstimada.desviacioMitjana);
+  document.getElementById("resultatVarianciaEstimadaContinua").textContent=formatNumero(dispersioEstimada.variancia);
+  document.getElementById("resultatDTEstimadaContinua").textContent=formatNumero(dispersioEstimada.desviacioTipica);
+  document.getElementById("resultatCVEstimatContinua").textContent=dispersioEstimada.coeficientVariacio===null ? "No definit (mitjana = 0)" : formatNumero(dispersioEstimada.coeficientVariacio)+" %";
+
   ocultarMissatgesResultats();
 
   document
@@ -1735,6 +1836,10 @@ function construirTaulaContinua(
   document
     .getElementById("missatgeClasseModal")
     .classList.remove("hidden");
+
+  document.getElementById("mesuresDispersioContinuaReal").classList.remove("hidden");
+  document.getElementById("mesuresDispersioContinuaEstimada").classList.remove("hidden");
+  document.getElementById("missatgeDispersioContinua").classList.remove("hidden");
 
   document
     .getElementById("resultats")
@@ -1778,6 +1883,11 @@ function construirTaula(dades,N,tipus){
         <th>Freq. abs. acumulada<br>Nᵢ</th>
         <th>Freq. rel. acumulada<br>Fᵢ</th>
         <th>xᵢ · nᵢ</th>
+        <th>xᵢ − x̄</th>
+        <th>|xᵢ − x̄|</th>
+        <th>nᵢ · |xᵢ − x̄|</th>
+        <th>(xᵢ − x̄)²</th>
+        <th>nᵢ · (xᵢ − x̄)²</th>
       </tr>
     `;
 
@@ -1808,7 +1918,12 @@ function construirTaula(dades,N,tipus){
 
   let absolutaAcumulada=0;
   let relativaAcumulada=0;
-  let sumaProductes=0;
+  const sumaProductes=esDiscreta
+    ? dades.reduce((s,d)=>s+d.valor*d.frequencia,0)
+    : 0;
+  const mitjanaTaula=esDiscreta ? sumaProductes/N : null;
+  let sumaAbsPonderada=0;
+  let sumaQuadratsPonderada=0;
 
   dades.forEach(
     (dada,index)=>{
@@ -1836,7 +1951,14 @@ function construirTaula(dades,N,tipus){
         const producte=
           dada.valor*dada.frequencia;
 
-        sumaProductes+=producte;
+        const diferencia=dada.valor-mitjanaTaula;
+        const diferenciaAbs=Math.abs(diferencia);
+        const absPonderada=dada.frequencia*diferenciaAbs;
+        const diferenciaQuadrat=Math.pow(diferencia,2);
+        const quadratPonderat=dada.frequencia*diferenciaQuadrat;
+
+        sumaAbsPonderada+=absPonderada;
+        sumaQuadratsPonderada+=quadratPonderat;
 
         fila.innerHTML=`
           <td>${formatNumero(dada.valor)}</td>
@@ -1861,6 +1983,11 @@ function construirTaula(dades,N,tipus){
           </td>
 
           <td>${formatNumero(producte)}</td>
+          <td>${formatNumero(diferencia)}</td>
+          <td>${formatNumero(diferenciaAbs)}</td>
+          <td>${formatNumero(absPonderada)}</td>
+          <td>${formatNumero(diferenciaQuadrat)}</td>
+          <td>${formatNumero(quadratPonderat)}</td>
         `;
 
       }else if(teAcumulades){
@@ -1917,6 +2044,11 @@ function construirTaula(dades,N,tipus){
       <td>—</td>
       <td>—</td>
       <td>${formatNumero(sumaProductes)}</td>
+      <td>—</td>
+      <td>—</td>
+      <td>${formatNumero(sumaAbsPonderada)}</td>
+      <td>—</td>
+      <td>${formatNumero(sumaQuadratsPonderada)}</td>
     `;
 
   }else if(teAcumulades){
@@ -1976,6 +2108,10 @@ function construirTaula(dades,N,tipus){
       N,
       sumaProductes
     );
+
+    mostrarMesuresDispersioDiscreta(dades,N,sumaProductes/N);
+
+    document.getElementById("missatgeDispersio").classList.remove("hidden");
   }
 
   document
@@ -1995,7 +2131,12 @@ function ocultarMissatgesResultats(){
     "missatgeClasseModal",
     "moda",
     "mesuresCentralitzacio",
-    "mesuresContinua"
+    "mesuresDispersioDiscreta",
+    "mesuresContinua",
+    "mesuresDispersioContinuaReal",
+    "mesuresDispersioContinuaEstimada",
+    "missatgeDispersio",
+    "missatgeDispersioContinua"
   ].forEach(id=>{
 
     document
@@ -2100,6 +2241,28 @@ function mostrarMesuresCentralitzacio(
   document
     .getElementById("mesuresCentralitzacio")
     .classList.remove("hidden");
+}
+
+
+function mostrarMesuresDispersioDiscreta(dades,N,mitjana){
+
+  const valorsAmbFreq=dades.filter(d=>d.frequencia>0);
+  const rang=valorsAmbFreq[valorsAmbFreq.length-1].valor-valorsAmbFreq[0].valor;
+
+  const sumaDM=dades.reduce((s,d)=>s+d.frequencia*Math.abs(d.valor-mitjana),0);
+  const desviacioMitjana=sumaDM/N;
+
+  const sumaQuadrats=dades.reduce((s,d)=>s+d.frequencia*Math.pow(d.valor-mitjana,2),0);
+  const variancia=sumaQuadrats/N;
+  const desviacioTipica=Math.sqrt(variancia);
+  const coeficientVariacio=mitjana!==0 ? desviacioTipica/Math.abs(mitjana)*100 : null;
+
+  document.getElementById("resultatRangDiscreta").textContent=formatNumero(rang);
+  document.getElementById("resultatDMDiscreta").textContent=formatNumero(desviacioMitjana);
+  document.getElementById("resultatVarianciaDiscreta").textContent=formatNumero(variancia);
+  document.getElementById("resultatDTDiscreta").textContent=formatNumero(desviacioTipica);
+  document.getElementById("resultatCVDiscreta").textContent=coeficientVariacio===null ? "No definit (mitjana = 0)" : formatNumero(coeficientVariacio)+" %";
+  document.getElementById("mesuresDispersioDiscreta").classList.remove("hidden");
 }
 
 
@@ -2218,6 +2381,45 @@ function calcularMedianaDadesIndividuals(dades){
     ordenades[N/2-1]+
     ordenades[N/2]
   )/2;
+}
+
+
+function calcularDispersioDadesIndividuals(dades){
+
+  const N=dades.length;
+  const mitjana=dades.reduce((s,v)=>s+v,0)/N;
+  const minim=Math.min(...dades);
+  const maxim=Math.max(...dades);
+  const rang=maxim-minim;
+  const desviacioMitjana=dades.reduce((s,v)=>s+Math.abs(v-mitjana),0)/N;
+  const variancia=dades.reduce((s,v)=>s+Math.pow(v-mitjana,2),0)/N;
+
+  return {
+    rang,
+    desviacioMitjana,
+    variancia,
+    desviacioTipica:Math.sqrt(variancia),
+    coeficientVariacio:mitjana!==0 ? Math.sqrt(variancia)/Math.abs(mitjana)*100 : null
+  };
+}
+
+function calcularDispersioAgrupada(intervals,mitjanaEstimada,N){
+
+  const rang=intervals[intervals.length-1].superior-intervals[0].inferior;
+  const desviacioMitjana=intervals.reduce(
+    (s,i)=>s+i.frequencia*Math.abs(i.marca-mitjanaEstimada),0
+  )/N;
+  const variancia=intervals.reduce(
+    (s,i)=>s+i.frequencia*Math.pow(i.marca-mitjanaEstimada,2),0
+  )/N;
+
+  return {
+    rang,
+    desviacioMitjana,
+    variancia,
+    desviacioTipica:Math.sqrt(variancia),
+    coeficientVariacio:mitjanaEstimada!==0 ? Math.sqrt(variancia)/Math.abs(mitjanaEstimada)*100 : null
+  };
 }
 
 
